@@ -2,6 +2,7 @@ package test.functional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -97,6 +98,21 @@ public class MagicBakeryTest {
 		}
 		return new CustomerOrder(name, recipeList, garnishList, 1);
 	}
+
+	public Collection<CustomerOrder> getFulfilableCustomersWrapper(MagicBakery bakery) throws ClassNotFoundException, IllegalAccessException, InvocationTargetException {
+		Method mtd = FunctionalHelper.getMethod(bakery, "getFulfillableCustomers");
+        if (mtd == null) {
+		    // there is no getFulfillableCustomers in MagicBakery, let's try getFulfilable
+		    mtd = FunctionalHelper.getMethod(bakery, "getFulfilableCustomers");
+        }
+
+        if (mtd == null) return null;
+
+        // This is a complicated way for saying: bakery.getFulfillableCustomers();
+        @SuppressWarnings("unchecked")
+        Collection<CustomerOrder> fulfillable = (Collection<CustomerOrder>)mtd.invoke(bakery);
+        return fulfillable;
+    }
 
 	@BeforeAll
 	public static void setUp() throws IOException, FileNotFoundException {
@@ -1127,7 +1143,7 @@ public class MagicBakeryTest {
 	}
 
 	@Test
-	public void testGetFulfillableCustomers() throws NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
+	public void testGetFulfillableCustomers() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
 		MagicBakery bakery = bakeryFactory();
 		bakery.startGame(playerNames, "./io/customers.csv");
 
@@ -1156,15 +1172,16 @@ public class MagicBakeryTest {
 
 		String[] ingredients = {"flour", "sugar", "eggs", "butter", "fruit", "chocolate"};
 		setupCurrentHand(bakery, ingredients);
-		
-		Collection<CustomerOrder> fulfillable = bakery.getFulfilableCustomers();
+
+		Collection<CustomerOrder> fulfillable = getFulfilableCustomersWrapper(bakery);
+		assertNotNull(fulfillable);
 		assertEquals(2, fulfillable.size());
 		assertTrue(fulfillable.contains(customer1));
 		assertTrue(fulfillable.contains(customer2));
 	}
 
 	@Test
-	public void testGetFulfillableCustomers__None() throws NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
+	public void testGetFulfillableCustomers__None() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
 		MagicBakery bakery = bakeryFactory();
 		bakery.startGame(playerNames, "./io/customers.csv");
 
@@ -1194,12 +1211,13 @@ public class MagicBakeryTest {
 		String[] ingredients = {"flour", "sugar", "eggs", "butter", "fruit", "chocolate"};
 		setupCurrentHand(bakery, ingredients);
 		
-		Collection<CustomerOrder> fulfillable = bakery.getFulfilableCustomers();
+		Collection<CustomerOrder> fulfillable = getFulfilableCustomersWrapper(bakery);
+		assertNotNull(fulfillable);
 		assertEquals(0, fulfillable.size());
 	}
 
 	@Test
-	public void testGetFulfillableCustomers__EmptyCustomers() throws NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
+	public void testGetFulfillableCustomers__EmptyCustomers() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
 		MagicBakery bakery = bakeryFactory();
 		bakery.startGame(playerNames, "./io/customers.csv");
 
@@ -1210,12 +1228,13 @@ public class MagicBakeryTest {
 		String[] ingredients = {"flour", "sugar", "eggs", "butter", "fruit", "chocolate"};
 		setupCurrentHand(bakery, ingredients);
 		
-		Collection<CustomerOrder> fulfillable = bakery.getFulfilableCustomers();
+		Collection<CustomerOrder> fulfillable = getFulfilableCustomersWrapper(bakery);
+		assertNotNull(fulfillable);
 		assertEquals(0, fulfillable.size());
 	}
 
 	@Test
-	public void testGetFulfillableCustomers__EmptyHand() throws NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
+	public void testGetFulfillableCustomers__EmptyHand() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException, IOException, FileNotFoundException, InvocationTargetException {
 		MagicBakery bakery = bakeryFactory();
 		bakery.startGame(playerNames, "./io/customers.csv");
 
@@ -1245,7 +1264,8 @@ public class MagicBakeryTest {
 		String[] ingredients = {};
 		setupCurrentHand(bakery, ingredients);
 		
-		Collection<CustomerOrder> fulfillable = bakery.getFulfilableCustomers();
+		Collection<CustomerOrder> fulfillable = getFulfilableCustomersWrapper(bakery);
+		assertNotNull(fulfillable);
 		assertEquals(0, fulfillable.size());
 	}
 

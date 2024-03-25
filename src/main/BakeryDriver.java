@@ -1,22 +1,16 @@
 import java.util.ArrayList;
 import bakery.Ingredient;
+import bakery.Layer;
+import bakery.MagicBakery;
 
 public class BakeryDriver {
 
     public BakeryDriver() {
+
     }
 
     public static void main(String[] args)  {
-        Ingredient Flour = new Ingredient("Flour");
-        Ingredient Sugar = new Ingredient("Sugar");
-        Ingredient Eggs = new Ingredient("Eggs");
-        Ingredient Milk = new Ingredient("Milk");
-        ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
-
-        ingredients.add(Flour);
-        ingredients.add(Sugar);
-        ingredients.add(Eggs);
-        ingredients.add(Milk);
+        MagicBakery magicBakery = new MagicBakery(0, null, null);
     }
 
 }

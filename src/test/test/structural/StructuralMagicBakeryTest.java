@@ -16,6 +16,13 @@ public class StructuralMagicBakeryTest {
     static Field[] fields;
     static Method[] methods;
 
+    public String getMethodGetFulfilableCustomers() {
+        if (StructuralHelper.methodExists("getFulfilableCustomers", methods)) {
+            return "getFulfilableCustomers";
+        }
+        return "getFulfillableCustomers";
+    }
+
     @BeforeAll
     public static void setUp() {
         fields = StructuralHelper.getFields(FQCN);
@@ -190,7 +197,8 @@ public class StructuralMagicBakeryTest {
 
     @Test
     public void testGetFulfilableCustomersExists() {
-        assertTrue(StructuralHelper.methodExists("getFulfilableCustomers", methods));
+        String getFulfillable = getMethodGetFulfilableCustomers();
+        assertTrue(StructuralHelper.methodExists(getFulfillable, methods));
     }
 
     @Test
@@ -300,7 +308,8 @@ public class StructuralMagicBakeryTest {
 
     @Test
     public void testGetFulfilableCustomersIsPublic() {
-        assertTrue(StructuralHelper.methodAccessIsAccessType("getFulfilableCustomers", methods, AccessType.PUBLIC));
+        String getFulfillable = getMethodGetFulfilableCustomers();
+        assertTrue(StructuralHelper.methodAccessIsAccessType(getFulfillable, methods, AccessType.PUBLIC));
     }
 
     @Test
@@ -420,7 +429,8 @@ public class StructuralMagicBakeryTest {
 
     @Test
     public void testGetFulfilableCustomersTakesNothingReturnsCollectionOfCustomerOrder() throws ClassNotFoundException, NoSuchFieldException {
-        assertTrue(StructuralHelper.methodHasGenericReturnType("getFulfilableCustomers", methods, Class.forName("java.util.Collection"), Class.forName("bakery.CustomerOrder") ));
+        String getFulfillable = getMethodGetFulfilableCustomers();
+        assertTrue(StructuralHelper.methodHasGenericReturnType(getFulfillable, methods, Class.forName("java.util.Collection"), Class.forName("bakery.CustomerOrder") ));
     }
 
     @Test

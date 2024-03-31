@@ -1,10 +1,16 @@
 package bakery;
 import java.io.IOException;
 import java.util.ArrayList;
+import util.CardUtils;
 
 public class MagicBakery {
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
-
+        ArrayList<Ingredient> ingredientDeck = new ArrayList<Ingredient>();
+        try {
+            ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args){

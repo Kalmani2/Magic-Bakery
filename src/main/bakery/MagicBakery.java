@@ -6,11 +6,8 @@ import util.CardUtils;
 public class MagicBakery {
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
         ArrayList<Ingredient> ingredientDeck = new ArrayList<Ingredient>();
-        try {
-            ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+
     }
 
     public static void main(String[] args){

@@ -6,12 +6,18 @@ public class CustomerOrder {
     private int level;
     private String name;
     private ArrayList<Ingredient> recipe;
+    private CustomerOrderStatus status;
 
-    public CustomerOrder(String name, ArrayList<Ingredient> recipe, ArrayList<Ingredient> garnish, int level){
+    public enum CustomerOrderStatus{
+        WAITING, FULFILLED, GARNISHED, IMPATIENT, GIVEN_UP
+    }
+
+    public CustomerOrder(String name, ArrayList<Ingredient> recipe, ArrayList<Ingredient> garnish, int level, CustomerOrderStatus status){
         this.garnish = garnish;
         this.level = level;
         this.name = name;
         this.recipe = recipe;
+        this.status = status;
     }
 
     public ArrayList<Ingredient> getGarnish(){
@@ -38,6 +44,15 @@ public class CustomerOrder {
             recipeDiscription += recipe.get(i) + ", ";
         }
         return("Recipe: " + recipeDiscription);
+    }
+    public void setStatus(CustomerOrderStatus status){
+        this.status = status;
+    }
+    public CustomerOrderStatus getStatus(){
+        return status;
+    }
+    public void abandon(){
+        this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
     }
     @Override
     public String toString(){

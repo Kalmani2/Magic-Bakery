@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.Layer;
 
@@ -68,7 +70,55 @@ public class CardUtils {
         }
 
         return returnLayer;
-    } 
+    }
+
+    public static ArrayList<CustomerOrder> readCustomerFile(String path){
+        ArrayList<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
+        String line;
+        ArrayList<Layer> layerList = new ArrayList<Layer>();
+        layerList = readLayerFile("../../io/layers.csv");
+        ArrayList<Layer> uniqueLayerList = new ArrayList<>();
+        
+        // Finds the unique layers in the list
+        for (Layer layer : layerList) {
+            boolean isUnique = true;
+            for (Layer uniqueLayer : uniqueLayerList) {
+                if (uniqueLayer.getName().equals(layer.getName())) {
+                    isUnique = false;
+                    break;
+                }
+            }
+            if (isUnique) {
+                uniqueLayerList.add(layer);
+            }
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))){
+            br.readLine();
+            while ((line = br.readLine()) != null){
+                orderList.addAll(stringToCustomerOrder(line,layerList));
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
+    private static ArrayList<CustomerOrder> stringToCustomerOrder(String str, ArrayList<Layer> layers){
+        ArrayList<CustomerOrder> returnOrder = new ArrayList<CustomerOrder>();
+        String[] parts = str.split(", ");
+        int level = Integer.parseInt(parts[0]);
+        String orderName = parts[1];
+        ArrayList<Ingredient> recipeList = new ArrayList<>();
+        ArrayList<Ingredient> garnishList = new ArrayList<>();
+        recipeList = stringToIngredients(parts[2]);
+        garnishList = stringToIngredients(parts[3]);
+        CustomerOrder order = new CustomerOrder(orderName, recipeList, garnishList, level, CustomerOrder.CustomerOrderStatus.WAITING);
+        returnOrder.add(order);
+
+        return returnOrder;
+    }
 
     
 }

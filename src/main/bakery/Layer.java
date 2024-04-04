@@ -9,6 +9,10 @@ public class Layer extends Ingredient {
         this.recipe = recipe;
     }
 
+    public String getName(){
+        return super.toString();
+    }
+
     public ArrayList<Ingredient> getRecipe(){
         return recipe;
     }

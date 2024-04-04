@@ -34,6 +34,6 @@ public class MagicBakery {
         Layer layer = new Layer("Layer1", ingredients);
         System.out.println(layer.getRecipeDescription());
 
-        CustomerOrder order1 = new CustomerOrder("Bob", layer.getRecipe(), garnishes, 1);
+        CustomerOrder order1 = new CustomerOrder("Bob", layer.getRecipe(), garnishes, 1, CustomerOrder.CustomerOrderStatus.WAITING);
     }
 }

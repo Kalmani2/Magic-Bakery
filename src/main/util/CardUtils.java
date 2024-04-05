@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.Layer;
@@ -72,7 +71,7 @@ public class CardUtils {
         return returnLayer;
     }
 
-    public static ArrayList<CustomerOrder> readCustomerFile(String path){
+    public static ArrayList<CustomerOrder> readCustomerFile(String path, ArrayList<Layer> layer){
         ArrayList<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
         String line;
         ArrayList<Layer> layerList = new ArrayList<Layer>();
@@ -80,16 +79,16 @@ public class CardUtils {
         ArrayList<Layer> uniqueLayerList = new ArrayList<>();
         
         // Finds the unique layers in the list
-        for (Layer layer : layerList) {
+        for (Layer layers : layerList) {
             boolean isUnique = true;
             for (Layer uniqueLayer : uniqueLayerList) {
-                if (uniqueLayer.getName().equals(layer.getName())) {
+                if (uniqueLayer.getName().equals(layers.getName())) {
                     isUnique = false;
                     break;
                 }
             }
             if (isUnique) {
-                uniqueLayerList.add(layer);
+                uniqueLayerList.add(layers);
             }
         }
 

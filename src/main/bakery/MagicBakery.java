@@ -10,6 +10,12 @@ public class MagicBakery {
 
     }
 
+    public void startGame(ArrayList<String> playerNames, String customerDeckFile){
+        for (String playerName : playerNames) {
+            System.out.println(playerName);
+        }
+    }
+
     public static void main(String[] args){
         Ingredient flour = new Ingredient("Flour");
         Ingredient sugar = new Ingredient("Sugar");

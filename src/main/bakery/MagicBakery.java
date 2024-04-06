@@ -1,14 +1,19 @@
 package bakery;
 import java.util.ArrayList;
+import java.util.Collection;
 import util.CardUtils;
 
 public class MagicBakery {
-    public ArrayList<Player> players;
+    public Collection<Player> players;
+    private int[] playerTurnList;
+    private int playerTurn;
 
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
         ArrayList<Ingredient> ingredientDeck = new ArrayList<Ingredient>();
         ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
         players = new ArrayList<>();
+        playerTurnList = new int[players.size()];
+        playerTurn = 1;
     }
 
     public void startGame(ArrayList<String> playerNames, String customerDeckFile){
@@ -18,6 +23,16 @@ public class MagicBakery {
         }
         System.out.println(players);
     }
+
+    // public Player getCurrentPlayer(){
+    //     Player currentPlayer = players.get(playerTurn);
+    // }
+
+    public Collection<Player> getPlayers(){
+        return players;
+    }
+
+
 
     public static void main(String[] args){
         Ingredient flour = new Ingredient("Flour");
@@ -35,6 +50,7 @@ public class MagicBakery {
         ingredients.add(flour);
         ingredients.add(sugar);
         ingredients.add(eggs);
+        ingredients.add(chocolate);
         ingredients.add(milk);
 
         ArrayList<Ingredient> garnishes = new ArrayList<Ingredient>();
@@ -44,5 +60,10 @@ public class MagicBakery {
         System.out.println(layer.getRecipeDescription());
 
         CustomerOrder order1 = new CustomerOrder("Bob", layer.getRecipe(), garnishes, 1, CustomerOrder.CustomerOrderStatus.WAITING);
+
+        Player joe = new Player("Joe");
+        joe.addToHand(ingredients);
+        System.out.println(joe.getHand());
+        System.out.println(joe.getHandStr());
     }
 }

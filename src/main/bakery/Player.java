@@ -1,9 +1,6 @@
 package bakery;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class Player {
     private ArrayList<Ingredient> hand;
@@ -41,25 +38,32 @@ public class Player {
     }
 
     public ArrayList<Ingredient> getHand(){
-        List<Ingredient> sortedHand = new ArrayList<>();
-        sortedHand = hand;
-        // Collections.sort(sortedHand);
-        return hand;
+        // Sort the hand by ascii value
+        ArrayList<Ingredient> sortedHand = new ArrayList<>(hand); 
+        
+        for (int i = 0; i < sortedHand.size(); i++){
+            int minimumIndex = i;
+            for (int j = i + 1; j < sortedHand.size(); j++){
+                int result = sortedHand.get(minimumIndex).toString().compareTo(sortedHand.get(j).toString());
+                if (result > 0 ){ 
+                    minimumIndex = j;
+                }
+            }
+            Ingredient temp = sortedHand.get(i);
+            sortedHand.set(i, sortedHand.get(minimumIndex));
+            sortedHand.set(minimumIndex, temp);
+        }
+    
+        return sortedHand;
     }
 
     public String getHandStr(){
-
         // Sort hand
         ArrayList<Ingredient> newHand = getHand();
-        Ingredient[] sortedHand = newHand.toArray(new Ingredient[0]);
-        Arrays.sort(sortedHand);
-
         ArrayList<String> handIngredients = new ArrayList<>();
         ArrayList<Integer> handIngredientOccurrence = new ArrayList<>();
 
-        // Set the ingredients and its occurrences in its proper indexes
-        // Iterate through sorted hand
-        for (Ingredient ingredient : sortedHand) {
+        for (Ingredient ingredient : newHand) {
             String ingredientName = ingredient.toString();
             int index = -1;
             for (int i = 0; i < handIngredients.size(); i++) {
@@ -81,9 +85,21 @@ public class Player {
 
         // Build string
 
-        
+        StringBuilder returnString = new StringBuilder();
+        for (int i = 0; i < handIngredients.size(); i++){
+            if (handIngredientOccurrence.get(i) == 1){
+                returnString.append(handIngredients.get(i));
+            }
+            else{
+                returnString.append((handIngredients.get(i) + " (x" + handIngredientOccurrence.get(i) + ") "));
+            }
+            if (i != handIngredients.size()-1){
+                returnString.append(", ");
+            }
+        }
 
-        return "str";
+        String result = returnString.toString();
+        return result;
     }
 
     public String toString(){

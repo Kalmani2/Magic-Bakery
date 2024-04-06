@@ -1,19 +1,22 @@
 package bakery;
-import java.io.IOException;
 import java.util.ArrayList;
 import util.CardUtils;
 
 public class MagicBakery {
+    public ArrayList<Player> players;
+
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
         ArrayList<Ingredient> ingredientDeck = new ArrayList<Ingredient>();
         ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-
+        players = new ArrayList<>();
     }
 
     public void startGame(ArrayList<String> playerNames, String customerDeckFile){
-        for (String playerName : playerNames) {
-            System.out.println(playerName);
+        for (String newName : playerNames){
+            Player newPlayer = new Player(newName);
+            players.add(newPlayer);
         }
+        System.out.println(players);
     }
 
     public static void main(String[] args){

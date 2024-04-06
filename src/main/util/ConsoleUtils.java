@@ -32,7 +32,6 @@ public class ConsoleUtils {
                 if (i > 2){
                     String addAnother = readLine("%s [Y]es/[N]o ", "Add another?").toLowerCase().trim();
                     if (addAnother.equals("n")) {
-                        System.out.println(playerNames);
                         return playerNames;
                     }
                 }
@@ -41,7 +40,6 @@ public class ConsoleUtils {
 
             }
         }
-        System.out.println(playerNames);
         return playerNames;
     }
 

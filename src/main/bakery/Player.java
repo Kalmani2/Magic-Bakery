@@ -91,7 +91,7 @@ public class Player {
                 returnString.append(handIngredients.get(i));
             }
             else{
-                returnString.append((handIngredients.get(i) + " (x" + handIngredientOccurrence.get(i) + ") "));
+                returnString.append((handIngredients.get(i) + " (x" + handIngredientOccurrence.get(i) + ")"));
             }
             if (i != handIngredients.size()-1){
                 returnString.append(", ");

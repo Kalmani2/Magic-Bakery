@@ -2,6 +2,11 @@ package util;
 import java.io.File;
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import bakery.MagicBakery;
+import bakery.Player;
 
 public class ConsoleUtils {
     private Console console;
@@ -17,6 +22,26 @@ public class ConsoleUtils {
         return console.readLine(fmt, args);
     }
 
+    public Player promptForExistingPlayer(String prompt, MagicBakery bakery){
+        Player currentPlayer = bakery.getCurrentPlayer();
+        Collection<Player> players = bakery.getPlayers();
+        HashMap<Integer, Player> playerTurns = bakery.getPlayerTurnList();
+
+        System.out.println("Our players are: ");
+        int value = 0;
+        for (Player player : players){
+            System.out.print(value + "." + player.toString() + " ");
+            value++;
+        }
+        System.out.println("");
+        int playerNumber = Integer.parseInt(readLine("%s Select a player: ", prompt));
+
+        Player selectedPlayer = playerTurns.get(playerNumber);
+
+        return selectedPlayer;
+
+    }
+
     public File promptForFilePath(String prompt){
         while (true){
             String filePath = readLine("%s File Path? ", prompt);
@@ -30,7 +55,7 @@ public class ConsoleUtils {
         while (playerNames.size() < 5){
             for (int i = 1; i < 6; i++){
                 if (i > 2){
-                    String addAnother = readLine("%s [Y]es/[N]o ", "Add another?").toLowerCase().trim();
+                    String addAnother = readLine("%s [Y]es/[N]o ", prompt).toLowerCase().trim();
                     if (addAnother.equals("n")) {
                         return playerNames;
                     }

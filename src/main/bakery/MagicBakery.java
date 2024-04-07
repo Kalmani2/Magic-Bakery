@@ -15,7 +15,7 @@ public class MagicBakery {
         ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
         players = new ArrayList<>();
         playerTurnList = populatePlayerTurnList();
-        playerTurn = 1;
+        playerTurn = 0;
         actionsRemaining = getActionsPermitted();
     }
 
@@ -35,11 +35,15 @@ public class MagicBakery {
     }
 
     public HashMap<Integer, Player> populatePlayerTurnList(){
-        int value = 1;
+        int value = 0;
         for (Player nplayer : players){
             playerTurnList.put(value, nplayer);
             value++;
         }
+        return playerTurnList;
+    }
+
+    public HashMap<Integer, Player> getPlayerTurnList(){
         return playerTurnList;
     }
 
@@ -50,6 +54,13 @@ public class MagicBakery {
 
     public Collection<Player> getPlayers(){
         return players;
+    }
+
+    public void passCard(Ingredient ingredient, Player recipient){
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.removeFromHand(ingredient);
+        recipient.addToHand(ingredient);
+        actionsRemaining -= 1;
     }
 
     public void startGame(ArrayList<String> playerNames, String customerDeckFile){

@@ -20,7 +20,7 @@ public class BakeryDriver {
         // System.out.println(CardUtils.readLayerFile("../../io/layers.csv"));
         // util2.promptForYesNo("Do you want to continue?");
         ArrayList<String> playerNames = new ArrayList<>();
-        playerNames = util2.promptForNewPlayers("Hello");
+        playerNames = util2.promptForNewPlayers("Add another?");
         magicBakery.startGame(playerNames, null);
     }
 

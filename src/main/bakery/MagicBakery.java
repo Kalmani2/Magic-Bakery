@@ -10,6 +10,11 @@ public class MagicBakery {
     private int playerTurn;
     private int actionsRemaining;
 
+    // ActionType enumeration
+    public enum ActionType{
+        DRAW_INGREDIENT, PASS_INGREDIENT, BAKE_LAYER, FULFIL_ORDER, REFRESH_PANTRY
+    }
+
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
         ArrayList<Ingredient> ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
         this.players = new ArrayList<>();

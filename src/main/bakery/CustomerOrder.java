@@ -8,6 +8,7 @@ public class CustomerOrder {
     private ArrayList<Ingredient> recipe;
     private CustomerOrderStatus status;
 
+    // CustomerOrderStatus enumeration
     public enum CustomerOrderStatus{
         WAITING, FULFILLED, GARNISHED, IMPATIENT, GIVEN_UP
     }
@@ -22,6 +23,7 @@ public class CustomerOrder {
     public void abandon(){
         this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
     }
+
     public ArrayList<Ingredient> getGarnish(){
         return garnish;
     }

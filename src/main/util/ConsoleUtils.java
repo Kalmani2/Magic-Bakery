@@ -4,7 +4,8 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-
+import bakery.CustomerOrder;
+import bakery.Ingredient;
 import bakery.MagicBakery;
 import bakery.Player;
 
@@ -20,6 +21,14 @@ public class ConsoleUtils {
     }
     public String readLine(String fmt, Object args){
         return console.readLine(fmt, args);
+    }
+
+    public MagicBakery.ActionType promptForAction(String prompt, MagicBakery bakery){
+        return null;
+    }
+
+    public CustomerOrder promptForCustomer(String prompt, Collection<CustomerOrder> customers){
+        return null;
     }
 
     public Player promptForExistingPlayer(String prompt, MagicBakery bakery){
@@ -48,6 +57,10 @@ public class ConsoleUtils {
             File file = new File(filePath);
             return file;
         }
+    }
+
+    public Ingredient promptForIngredient(String prompt, Collection<Ingredient> ingredients){
+        return null;
     }
 
     public ArrayList<String> promptForNewPlayers(String prompt){
@@ -90,6 +103,10 @@ public class ConsoleUtils {
                 return false;
             }
         }
+    }
+
+    private Object promptEnumerateCollection(String prompt, Collection<Object> collection){
+        return null;
     }
 
 }

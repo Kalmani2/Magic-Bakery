@@ -19,7 +19,9 @@ public class CustomerOrder {
         this.recipe = recipe;
         this.status = status;
     }
-
+    public void abandon(){
+        this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
+    }
     public ArrayList<Ingredient> getGarnish(){
         return garnish;
     }
@@ -50,9 +52,6 @@ public class CustomerOrder {
     }
     public CustomerOrderStatus getStatus(){
         return status;
-    }
-    public void abandon(){
-        this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
     }
     @Override
     public String toString(){

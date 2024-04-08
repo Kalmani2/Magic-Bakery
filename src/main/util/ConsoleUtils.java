@@ -28,13 +28,13 @@ public class ConsoleUtils {
         HashMap<Integer, Player> playerTurns = bakery.getPlayerTurnList();
 
         System.out.println("Our players are: ");
-        int value = 0;
+        int value = 1;
         for (Player player : players){
             System.out.print(value + "." + player.toString() + " ");
             value++;
         }
         System.out.println("");
-        int playerNumber = Integer.parseInt(readLine("%s Select a player: ", prompt));
+        int playerNumber = Integer.parseInt(readLine("%sSelect a player: ", prompt));
 
         Player selectedPlayer = playerTurns.get(playerNumber);
 

@@ -11,12 +11,14 @@ public class MagicBakery {
     private int actionsRemaining;
 
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
-        ArrayList<Ingredient> ingredientDeck = new ArrayList<Ingredient>();
-        ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-        players = new ArrayList<>();
-        playerTurnList = populatePlayerTurnList();
-        playerTurn = 0;
-        actionsRemaining = getActionsPermitted();
+        ArrayList<Ingredient> ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+        this.players = new ArrayList<>();
+        this.playerTurnList = new HashMap<Integer, Player>();
+        this.playerTurn = 1;
+    }
+
+    public boolean endTurn(){
+        return true;
     }
 
     public int getActionsPermitted(){
@@ -34,13 +36,12 @@ public class MagicBakery {
         return actionsRemaining;
     }
 
-    public HashMap<Integer, Player> populatePlayerTurnList(){
-        int value = 0;
+    public void populatePlayerTurnList(){
+        int value = 1;
         for (Player nplayer : players){
             playerTurnList.put(value, nplayer);
             value++;
         }
-        return playerTurnList;
     }
 
     public HashMap<Integer, Player> getPlayerTurnList(){
@@ -57,10 +58,13 @@ public class MagicBakery {
     }
 
     public void passCard(Ingredient ingredient, Player recipient){
+        actionsRemaining -= 1;
+        if (actionsRemaining <= 0){
+            throw new TooManyActionsException("Too many actions have been done");
+        }
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.removeFromHand(ingredient);
         recipient.addToHand(ingredient);
-        actionsRemaining -= 1;
     }
 
     public void startGame(ArrayList<String> playerNames, String customerDeckFile){
@@ -69,6 +73,7 @@ public class MagicBakery {
             players.add(newPlayer);
         }
         System.out.println(players);
+        this.actionsRemaining = getActionsPermitted();
     }
 
     public static void main(String[] args){

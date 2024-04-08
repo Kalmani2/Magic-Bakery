@@ -3,9 +3,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import util.CardUtils;
 import java.util.HashMap;
+import java.util.Random;
 
 public class MagicBakery {
-    public Collection<Player> players;
+    public Collection<Layer> layers;
+    private Collection<Player> players;
+    private Collection<Ingredient> pantry;
+    private Collection<Ingredient> pantryDeck;
+    private Collection<Ingredient> pantryDiscard;
+    private Random random;
+
     private HashMap<Integer, Player> playerTurnList;
     private int playerTurn;
     private int actionsRemaining;
@@ -20,6 +27,22 @@ public class MagicBakery {
         this.players = new ArrayList<>();
         this.playerTurnList = new HashMap<Integer, Player>();
         this.playerTurn = 1;
+    }
+
+    public void bakeLayer(Layer layer){
+
+    }
+
+    private Ingredient drawFromPantryDeck(){
+        return null;
+    }
+
+    public void drawFromPantry(String ingredientName){
+
+    }
+
+    public void drawFromPantry(Ingredient ingredient){
+
     }
 
     public boolean endTurn(){
@@ -41,6 +64,10 @@ public class MagicBakery {
         return actionsRemaining;
     }
 
+    public Collection<Layer> getBakeablelLayers(){
+        return null;
+    }
+
     public void populatePlayerTurnList(){
         int value = 1;
         for (Player nplayer : players){
@@ -58,6 +85,14 @@ public class MagicBakery {
         return currentPlayer;
     }
 
+    public Collection<Layer> getLayers(){
+        return null;
+    }
+
+    public Collection<Ingredient> getPantry(){
+        return null;
+    }
+
     public Collection<Player> getPlayers(){
         return players;
     }
@@ -70,6 +105,14 @@ public class MagicBakery {
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.removeFromHand(ingredient);
         recipient.addToHand(ingredient);
+    }
+
+    public void printGameState(){
+
+    }
+
+    public void refreshPantry(){
+        
     }
 
     public void startGame(ArrayList<String> playerNames, String customerDeckFile){

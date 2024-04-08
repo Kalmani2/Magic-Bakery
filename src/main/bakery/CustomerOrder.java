@@ -18,8 +18,9 @@ public class CustomerOrder {
         this.level = level;
         this.name = name;
         this.recipe = recipe;
-        this.status = status;
+        this.status = CustomerOrderStatus.WAITING;
     }
+
     public void abandon(){
         this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
     }
@@ -27,6 +28,7 @@ public class CustomerOrder {
     public ArrayList<Ingredient> getGarnish(){
         return garnish;
     }
+
     public String getGarnishDescription(){
         int length = garnish.size();
         String garnishDiscription = "";
@@ -35,12 +37,15 @@ public class CustomerOrder {
         }
         return("Garnish: " + garnishDiscription);
     }
+
     public int getLevel(){
         return level;
     }
+
     public ArrayList<Ingredient> getRecipe(){
         return recipe;
     }
+
     public String getRecipeDescription(){
         int length = recipe.size();
         String recipeDiscription = "";
@@ -49,12 +54,15 @@ public class CustomerOrder {
         }
         return("Recipe: " + recipeDiscription);
     }
+
     public void setStatus(CustomerOrderStatus status){
         this.status = status;
     }
+
     public CustomerOrderStatus getStatus(){
         return status;
     }
+    
     @Override
     public String toString(){
         return("Customer order class");

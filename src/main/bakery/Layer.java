@@ -1,5 +1,6 @@
 package bakery;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Layer extends Ingredient {
     private ArrayList<Ingredient> recipe;
@@ -7,6 +8,10 @@ public class Layer extends Ingredient {
     public Layer(String name, ArrayList<Ingredient> recipe){
         super(name);
         this.recipe = recipe;
+    }
+
+    public boolean canBake(List<Ingredient> ingredients){
+        return true;
     }
 
     public String getName(){

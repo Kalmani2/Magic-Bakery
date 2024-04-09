@@ -1,17 +1,22 @@
 package bakery;
+import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import util.CardUtils;
 import java.util.HashMap;
 import java.util.Random;
 
-public class MagicBakery {
-    public Collection<Layer> layers;
+public class MagicBakery implements Serializable{
+    private Customers customers;
+    private Collection<Layer> layers;
     private Collection<Player> players;
     private Collection<Ingredient> pantry;
     private Collection<Ingredient> pantryDeck;
     private Collection<Ingredient> pantryDiscard;
     private Random random;
+    private static final long serialVersionUID = 1L;
 
     private HashMap<Integer, Player> playerTurnList;
     private int playerTurn;
@@ -23,7 +28,7 @@ public class MagicBakery {
     }
 
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
-        ArrayList<Ingredient> ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+        List<Ingredient> ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
         this.players = new ArrayList<>();
         this.playerTurnList = new HashMap<Integer, Player>();
         this.playerTurn = 1;
@@ -49,6 +54,10 @@ public class MagicBakery {
         return true;
     }
 
+    public List<Ingredient> fulfillOrder(CustomerOrder customer, boolean garnish){
+        return null;
+    }
+
     public int getActionsPermitted(){
         int totalActions = 0;
         if (players.size() == 2 || players.size() == 3){
@@ -64,7 +73,7 @@ public class MagicBakery {
         return actionsRemaining;
     }
 
-    public Collection<Layer> getBakeablelLayers(){
+    public Collection<Layer> getBakeableLayers(){
         return null;
     }
 
@@ -85,6 +94,18 @@ public class MagicBakery {
         return currentPlayer;
     }
 
+    public Customers getCustomers(){
+        return null;
+    }
+
+    public Collection<CustomerOrder> getFulfilableCustomers(){
+        return null;
+    }
+
+    public Collection<CustomerOrder> getGarnishableCustomers(){
+        return null;
+    }
+
     public Collection<Layer> getLayers(){
         return null;
     }
@@ -97,6 +118,10 @@ public class MagicBakery {
         return players;
     }
 
+    public static MagicBakery loadState(File file){
+        return null;
+    }
+
     public void passCard(Ingredient ingredient, Player recipient){
         actionsRemaining -= 1;
         if (actionsRemaining <= 0){
@@ -107,6 +132,10 @@ public class MagicBakery {
         recipient.addToHand(ingredient);
     }
 
+    public void printCustomerServiceRecord(){
+
+    }
+
     public void printGameState(){
 
     }
@@ -115,7 +144,11 @@ public class MagicBakery {
         
     }
 
-    public void startGame(ArrayList<String> playerNames, String customerDeckFile){
+    public void saveState(File file){
+        
+    }
+
+    public void startGame(List<String> playerNames, String customerDeckFile){
         for (String newName : playerNames){
             Player newPlayer = new Player(newName);
             players.add(newPlayer);
@@ -148,7 +181,7 @@ public class MagicBakery {
         Layer layer = new Layer("Layer1", ingredients);
         System.out.println(layer.getRecipeDescription());
 
-        CustomerOrder order1 = new CustomerOrder("Bob", layer.getRecipe(), garnishes, 1, CustomerOrder.CustomerOrderStatus.WAITING);
+        CustomerOrder order1 = new CustomerOrder("Bob", layer.getRecipe(), garnishes, 1);
 
         Player joe = new Player("Joe");
         joe.addToHand(ingredients);

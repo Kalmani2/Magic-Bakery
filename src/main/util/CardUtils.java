@@ -3,14 +3,18 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collection;
 import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.Layer;
 
 public class CardUtils {
 
-    public static ArrayList<Ingredient> readIngredientFile(String path){
-        ArrayList<Ingredient> ingredientsList = new ArrayList<Ingredient>();
+    private CardUtils(){}
+
+    public static List<Ingredient> readIngredientFile(String path){
+        List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             br.readLine();
@@ -24,11 +28,11 @@ public class CardUtils {
         return ingredientsList;
     }
 
-    private static ArrayList<Ingredient> stringToIngredients(String str){
+    private static List<Ingredient> stringToIngredients(String str){
         String[] parts = str.split(", ");
         String ingredientName = parts[0];
         int count = Integer.parseInt(parts[1]);
-        ArrayList<Ingredient> returnIngredient = new ArrayList<Ingredient>();
+        List<Ingredient> returnIngredient = new ArrayList<Ingredient>();
         for (int i = 0; i < count; i++){
             Ingredient newIngredient = new Ingredient(ingredientName);
             returnIngredient.add(newIngredient);
@@ -36,8 +40,8 @@ public class CardUtils {
         return returnIngredient;
     }
 
-    public static ArrayList<Layer> readLayerFile(String path){
-        ArrayList<Layer> layerList = new ArrayList<Layer>();
+    public static List<Layer> readLayerFile(String path){
+        List<Layer> layerList = new ArrayList<Layer>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             br.readLine();
@@ -51,14 +55,14 @@ public class CardUtils {
         return layerList;
     }
 
-    private static ArrayList<Layer> stringToLayers(String str){
+    private static List<Layer> stringToLayers(String str){
         int commaIndex = str.indexOf(",");
-        ArrayList<Layer> returnLayer = new ArrayList<Layer>();
+        List<Layer> returnLayer = new ArrayList<Layer>();
         String layerName = str.substring(0, commaIndex);
         String recipeList = str.substring(commaIndex + 1);
         String[] recipeIngredientsString = recipeList.split("; ");
         int ingredientCount = recipeIngredientsString.length;
-        ArrayList<Ingredient> recipeIngredients = new ArrayList<Ingredient>();
+        List<Ingredient> recipeIngredients = new ArrayList<Ingredient>();
         for (int i = 0; i < ingredientCount; i++){
             Ingredient newIngredient = new Ingredient(recipeIngredientsString[i]);
             recipeIngredients.add(newIngredient);
@@ -71,12 +75,12 @@ public class CardUtils {
         return returnLayer;
     }
 
-    public static ArrayList<CustomerOrder> readCustomerFile(String path, ArrayList<Layer> layer){
-        ArrayList<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
+    public static List<CustomerOrder> readCustomerFile(String path, Collection<Layer> layer){
+        List<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
         String line;
-        ArrayList<Layer> layerList = new ArrayList<Layer>();
+        List<Layer> layerList = new ArrayList<Layer>();
         layerList = readLayerFile("../../io/layers.csv");
-        ArrayList<Layer> uniqueLayerList = new ArrayList<>();
+        List<Layer> uniqueLayerList = new ArrayList<>();
         
         // Finds the unique layers in the list
         for (Layer layers : layerList) {
@@ -95,7 +99,7 @@ public class CardUtils {
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             br.readLine();
             while ((line = br.readLine()) != null){
-                orderList.addAll(stringToCustomerOrder(line,layerList));
+                orderList.add(stringToCustomerOrder(line,layerList));
             }
         }
         catch (IOException e){
@@ -104,19 +108,22 @@ public class CardUtils {
         return orderList;
     }
 
-    private static ArrayList<CustomerOrder> stringToCustomerOrder(String str, ArrayList<Layer> layers){
-        ArrayList<CustomerOrder> returnOrder = new ArrayList<CustomerOrder>();
+    private static CustomerOrder stringToCustomerOrder(String str, Collection<Layer> layers){
+        List<CustomerOrder> returnOrder = new ArrayList<CustomerOrder>();
         String[] parts = str.split(", ");
         int level = Integer.parseInt(parts[0]);
         String orderName = parts[1];
-        ArrayList<Ingredient> recipeList = new ArrayList<>();
-        ArrayList<Ingredient> garnishList = new ArrayList<>();
+        List<Ingredient> recipeList = new ArrayList<>();
+        List<Ingredient> garnishList = new ArrayList<>();
         recipeList = stringToIngredients(parts[2]);
         garnishList = stringToIngredients(parts[3]);
-        CustomerOrder order = new CustomerOrder(orderName, recipeList, garnishList, level, CustomerOrder.CustomerOrderStatus.WAITING);
+        CustomerOrder order = new CustomerOrder(orderName, recipeList, garnishList, level);
         returnOrder.add(order);
 
-        return returnOrder;
+        // Placeholder
+        CustomerOrder customerOrder = new CustomerOrder(orderName, recipeList, garnishList, level);
+
+        return customerOrder;
     }
 
     

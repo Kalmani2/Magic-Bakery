@@ -2,6 +2,7 @@ package util;
 import java.io.File;
 import java.io.Console;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Collection;
 import java.util.HashMap;
 import bakery.CustomerOrder;
@@ -19,7 +20,7 @@ public class ConsoleUtils {
     public String readLine(){
         return console.readLine();
     }
-    public String readLine(String fmt, Object args){
+    public String readLine(String fmt, Object... args){
         return console.readLine(fmt, args);
     }
 
@@ -63,8 +64,8 @@ public class ConsoleUtils {
         return null;
     }
 
-    public ArrayList<String> promptForNewPlayers(String prompt){
-        ArrayList<String> playerNames = new ArrayList<>();
+    public List<String> promptForNewPlayers(String prompt){
+        List<String> playerNames = new ArrayList<>();
         while (playerNames.size() < 5){
             for (int i = 1; i < 6; i++){
                 if (i > 2){

@@ -1,11 +1,13 @@
 package bakery;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Layer extends Ingredient {
-    private ArrayList<Ingredient> recipe;
+public class Layer extends Ingredient implements Comparable<Ingredient>, Serializable{
+    private List<Ingredient> recipe;
+    private static final long serialVersionUID = 1L;
 
-    public Layer(String name, ArrayList<Ingredient> recipe){
+    public Layer(String name, List<Ingredient> recipe){
         super(name);
         this.recipe = recipe;
     }
@@ -18,7 +20,7 @@ public class Layer extends Ingredient {
         return super.toString();
     }
 
-    public ArrayList<Ingredient> getRecipe(){
+    public List<Ingredient> getRecipe(){
         return recipe;
     }
     
@@ -29,5 +31,9 @@ public class Layer extends Ingredient {
             recipeDiscription += recipe.get(i) + ", ";
         }
         return("Recipe: " + recipeDiscription);
+    }
+
+    public int hashCode(){
+        return 1;
     }
 }

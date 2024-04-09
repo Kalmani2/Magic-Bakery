@@ -1,19 +1,22 @@
 package bakery;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class CustomerOrder {
-    private ArrayList<Ingredient> garnish;
+public class CustomerOrder implements Serializable{
+    private List<Ingredient> garnish;
     private int level;
     private String name;
-    private ArrayList<Ingredient> recipe;
+    private List<Ingredient> recipe;
     private CustomerOrderStatus status;
+    private static final long serialVersionUID = 1L;
 
     // CustomerOrderStatus enumeration
     public enum CustomerOrderStatus{
         WAITING, FULFILLED, GARNISHED, IMPATIENT, GIVEN_UP
     }
 
-    public CustomerOrder(String name, ArrayList<Ingredient> recipe, ArrayList<Ingredient> garnish, int level, CustomerOrderStatus status){
+    public CustomerOrder(String name, List<Ingredient> recipe, List<Ingredient> garnish, int level){
         this.garnish = garnish;
         this.level = level;
         this.name = name;
@@ -25,7 +28,19 @@ public class CustomerOrder {
         this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
     }
 
-    public ArrayList<Ingredient> getGarnish(){
+    public boolean canFulfill(List<Ingredient> Ingredients){
+        return true;
+    }
+
+    public boolean canGarnish(List<Ingredient> Ingredients){
+        return true;
+    }
+
+    public List<Ingredient> fulfill(List<Ingredient> ingredients, boolean garnish){
+        return null;
+    }
+
+    public List<Ingredient> getGarnish(){
         return garnish;
     }
 
@@ -42,7 +57,7 @@ public class CustomerOrder {
         return level;
     }
 
-    public ArrayList<Ingredient> getRecipe(){
+    public List<Ingredient> getRecipe(){
         return recipe;
     }
 

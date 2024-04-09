@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.Layer;
@@ -36,7 +37,7 @@ public class BakeryDriver {
 
         
         MagicBakery magicBakery = new MagicBakery(1, "io/ingredients.csv", "io/layers.csv");
-        ArrayList<String> playerNames = util2.promptForNewPlayers("Add another?");
+        List<String> playerNames = util2.promptForNewPlayers("Add another?");
         magicBakery.startGame(playerNames, "io/customers.csv");
         magicBakery.populatePlayerTurnList();
         System.out.println("Player names are"+ playerNames);

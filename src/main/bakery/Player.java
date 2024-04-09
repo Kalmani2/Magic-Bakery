@@ -1,17 +1,20 @@
 package bakery;
 
+import java.util.List;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player {
-    private ArrayList<Ingredient> hand;
+public class Player implements Serializable{
+    private List<Ingredient> hand;
     private String name;
+    private static final long serialVersionUID = 1L;
 
     public Player(String name){
         this.name = name;
         this.hand = new ArrayList<>();
     }
 
-    public void addToHand(ArrayList<Ingredient> ingredients){
+    public void addToHand(List<Ingredient> ingredients){
         hand.addAll(ingredients);
     }
 
@@ -37,7 +40,7 @@ public class Player {
         }
     }
 
-    public ArrayList<Ingredient> getHand(){
+    public List<Ingredient> getHand(){
         // Sort the hand by ascii value
         ArrayList<Ingredient> sortedHand = new ArrayList<>(hand); 
         
@@ -59,7 +62,7 @@ public class Player {
 
     public String getHandStr(){
         // Sort hand
-        ArrayList<Ingredient> newHand = getHand();
+        List<Ingredient> newHand = getHand();
         ArrayList<String> handIngredients = new ArrayList<>();
         ArrayList<Integer> handIngredientOccurrence = new ArrayList<>();
 

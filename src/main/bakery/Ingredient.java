@@ -1,22 +1,31 @@
 package bakery;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Ingredient implements Comparable<Ingredient>, Serializable{
     private String name;
-    public static final Ingredient HELPFUL_DUCK = new Ingredient("HELPFUL_DUCK");
+    public static final Ingredient HELPFUL_DUCK = new Ingredient("Helpful duck 𓅭");
     private static final long serialVersionUID = 1L;
 
     public Ingredient(String name){
         this.name = name;
     }
 
+    @Override
     public boolean equals(Object o){
-        return true;
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+        Ingredient that = (Ingredient) o;
+        return Objects.equals(name, that.name);
     }
 
     public int hashCode(){
-        return 1;
+        return Objects.hash(name);
     }
 
     @Override
@@ -26,6 +35,6 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
 
     @Override
     public int compareTo(Ingredient o) {
-        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
+        return this.name.compareTo(o.name);
     }
 }

@@ -3,6 +3,7 @@ package bakery;
 import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Player implements Serializable{
     private List<Ingredient> hand;
@@ -41,27 +42,14 @@ public class Player implements Serializable{
     }
 
     public List<Ingredient> getHand(){
-        // Sort the hand by ascii value
-        ArrayList<Ingredient> sortedHand = new ArrayList<>(hand); 
+        List<Ingredient> sortedHand = new ArrayList<>(hand); 
         
-        for (int i = 0; i < sortedHand.size(); i++){
-            int minimumIndex = i;
-            for (int j = i + 1; j < sortedHand.size(); j++){
-                int result = sortedHand.get(minimumIndex).toString().compareTo(sortedHand.get(j).toString());
-                if (result > 0 ){ 
-                    minimumIndex = j;
-                }
-            }
-            Ingredient temp = sortedHand.get(i);
-            sortedHand.set(i, sortedHand.get(minimumIndex));
-            sortedHand.set(minimumIndex, temp);
-        }
+        Collections.sort(sortedHand);
     
         return sortedHand;
     }
 
     public String getHandStr(){
-        // Sort hand
         List<Ingredient> newHand = getHand();
         ArrayList<String> handIngredients = new ArrayList<>();
         ArrayList<Integer> handIngredientOccurrence = new ArrayList<>();
@@ -91,10 +79,10 @@ public class Player implements Serializable{
         StringBuilder returnString = new StringBuilder();
         for (int i = 0; i < handIngredients.size(); i++){
             if (handIngredientOccurrence.get(i) == 1){
-                returnString.append(handIngredients.get(i));
+                returnString.append(handIngredients.get(i).substring(0, 1).toUpperCase() + handIngredients.get(i).substring(1));
             }
             else{
-                returnString.append((handIngredients.get(i) + " (x" + handIngredientOccurrence.get(i) + ")"));
+                returnString.append((handIngredients.get(i).substring(0, 1).toUpperCase() + handIngredients.get(i).substring(1) + " (x" + handIngredientOccurrence.get(i) + ")"));
             }
             if (i != handIngredients.size()-1){
                 returnString.append(", ");

@@ -29,6 +29,9 @@ public class CustomerOrder implements Serializable{
     }
 
     public boolean canFulfill(List<Ingredient> Ingredients){
+        if (Ingredients.isEmpty()){
+            return false;
+        }
         return true;
     }
 
@@ -48,9 +51,13 @@ public class CustomerOrder implements Serializable{
         int length = garnish.size();
         String garnishDiscription = "";
         for (int i = 0; i < length; i++){
+            if (i == length-1){
+                garnishDiscription += recipe.get(i);
+                break;
+            }
             garnishDiscription += garnish.get(i) + ", ";
         }
-        return("Garnish: " + garnishDiscription);
+        return(garnishDiscription);
     }
 
     public int getLevel(){
@@ -65,9 +72,13 @@ public class CustomerOrder implements Serializable{
         int length = recipe.size();
         String recipeDiscription = "";
         for (int i = 0; i < length; i++){
+            if (i == length-1){
+                recipeDiscription += recipe.get(i);
+                break;
+            }
             recipeDiscription += recipe.get(i) + ", ";
         }
-        return("Recipe: " + recipeDiscription);
+        return(recipeDiscription);
     }
 
     public void setStatus(CustomerOrderStatus status){
@@ -80,6 +91,6 @@ public class CustomerOrder implements Serializable{
     
     @Override
     public String toString(){
-        return("Customer order class");
+        return(getRecipeDescription());
     }
 }

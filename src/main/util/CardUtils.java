@@ -29,16 +29,17 @@ public class CardUtils {
     }
 
     private static List<Ingredient> stringToIngredients(String str){
-        String[] parts = str.split(", ");
+        String[] parts = str.trim().split("\\s*,\\s*");
         String ingredientName = parts[0];
-        int count = Integer.parseInt(parts[1]);
-        List<Ingredient> returnIngredient = new ArrayList<Ingredient>();
+        int count = Integer.parseInt(parts[1].trim());
+        List<Ingredient> returnIngredient = new ArrayList<>();
         for (int i = 0; i < count; i++){
             Ingredient newIngredient = new Ingredient(ingredientName);
             returnIngredient.add(newIngredient);
         }
         return returnIngredient;
     }
+    
 
     public static List<Layer> readLayerFile(String path){
         List<Layer> layerList = new ArrayList<Layer>();
@@ -57,23 +58,22 @@ public class CardUtils {
 
     private static List<Layer> stringToLayers(String str){
         int commaIndex = str.indexOf(",");
-        List<Layer> returnLayer = new ArrayList<Layer>();
-        String layerName = str.substring(0, commaIndex);
+        List<Layer> returnLayer = new ArrayList<>();
+        String layerName = str.substring(0, commaIndex).trim();
         String recipeList = str.substring(commaIndex + 1);
-        String[] recipeIngredientsString = recipeList.split("; ");
-        int ingredientCount = recipeIngredientsString.length;
-        List<Ingredient> recipeIngredients = new ArrayList<Ingredient>();
-        for (int i = 0; i < ingredientCount; i++){
-            Ingredient newIngredient = new Ingredient(recipeIngredientsString[i]);
+        String[] recipeIngredientsString = recipeList.split(";\\s*"); // Adjusted split to handle spaces after semicolon
+        List<Ingredient> recipeIngredients = new ArrayList<>();
+        for (String ingredientString : recipeIngredientsString) {
+            Ingredient newIngredient = new Ingredient(ingredientString.trim()); // Trim to remove leading/trailing spaces
             recipeIngredients.add(newIngredient);
         }
         Layer newLayer = new Layer(layerName, recipeIngredients);
         for (int i = 0; i < 4; i++){
             returnLayer.add(newLayer);
         }
-
         return returnLayer;
     }
+    
 
     public static List<CustomerOrder> readCustomerFile(String path, Collection<Layer> layer){
         List<CustomerOrder> orderList = new ArrayList<CustomerOrder>();

@@ -91,6 +91,6 @@ public class CustomerOrder implements Serializable{
     
     @Override
     public String toString(){
-        return(getRecipeDescription());
+        return("some recipe");
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import util.CardUtils;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Stack;
 
 public class MagicBakery implements Serializable{
     private Customers customers;
@@ -28,8 +29,14 @@ public class MagicBakery implements Serializable{
     }
 
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
-        List<Ingredient> ingredientDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-        this.players = new ArrayList<>();
+        random = new Random(seed);
+        pantryDeck = new Stack<Ingredient>();
+        pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+        layers = CardUtils.readLayerFile(layerDeckFile);
+        pantry = new ArrayList<Ingredient>();
+        pantryDiscard = new Stack<Ingredient>();
+        players = new ArrayList<>();
+
         this.playerTurnList = new HashMap<Integer, Player>();
         this.playerTurn = 1;
     }
@@ -95,7 +102,7 @@ public class MagicBakery implements Serializable{
     }
 
     public Customers getCustomers(){
-        return null;
+        return customers;
     }
 
     public Collection<CustomerOrder> getFulfilableCustomers(){
@@ -107,11 +114,11 @@ public class MagicBakery implements Serializable{
     }
 
     public Collection<Layer> getLayers(){
-        return null;
+        return layers;
     }
 
     public Collection<Ingredient> getPantry(){
-        return null;
+        return pantry;
     }
 
     public Collection<Player> getPlayers(){

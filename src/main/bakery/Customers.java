@@ -15,7 +15,7 @@ public class Customers implements Serializable{
     private static final long serialVersionUID = 1L;
 
     public Customers(String deckFile, Random random, Collection<Layer> layers, int numPlayers){
-
+        
     }
 
     public CustomerOrder addCustomerOrder(){

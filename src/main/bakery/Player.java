@@ -37,6 +37,7 @@ public class Player implements Serializable{
             if (hand.get(i).toString().equals(ingredient.toString())) {
                 hand.remove(i);
                 i--;
+                break;
             }
         }
     }

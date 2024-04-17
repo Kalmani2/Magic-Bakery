@@ -9,10 +9,25 @@ import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.Layer;
 
+/**
+ * Class comprised of functions used to read csv files into lists
+ * @author Muhammad Kalmani
+ * @version 1.0
+ */
 public class CardUtils {
 
+    /**
+     * private constructor for the CardUtils class
+     *
+     */
     private CardUtils(){}
 
+    /**
+     * Reads a csv file and converts it into a list of ingredients
+     *
+     * @param path the file path for the ingredient file
+     * @return list of ingredients read from the csv file
+     */
     public static List<Ingredient> readIngredientFile(String path){
         List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
         String line;
@@ -28,6 +43,13 @@ public class CardUtils {
         return ingredientsList;
     }
 
+    /**
+     * Converts a line of the csv file into a list of ingredients
+     * Changes it from a string to an ingredient object
+     *
+     * @param str the string to be converted
+     * @return list of ingredients converted from the string
+     */
     private static List<Ingredient> stringToIngredients(String str){
         String[] parts = str.trim().split("\\s*,\\s*");
         String ingredientName = parts[0];
@@ -40,7 +62,12 @@ public class CardUtils {
         return returnIngredient;
     }
     
-
+    /**
+     * Reads a csv file and converts it into a list of layers
+     *
+     * @param path the file path for the layer file
+     * @return list of layer read from the csv file
+     */
     public static List<Layer> readLayerFile(String path){
         List<Layer> layerList = new ArrayList<Layer>();
         String line;
@@ -56,6 +83,13 @@ public class CardUtils {
         return layerList;
     }
 
+    /**
+     * Converts a line of the csv file into a list of layers
+     * Changes it from a string to an layer object
+     *
+     * @param str the string to be converted
+     * @return list of layer converted from the string
+     */
     private static List<Layer> stringToLayers(String str){
         int commaIndex = str.indexOf(",");
         List<Layer> returnLayer = new ArrayList<>();
@@ -74,7 +108,13 @@ public class CardUtils {
         return returnLayer;
     }
     
-
+    /**
+     * Reads a csv file and converts it into a list of CustomerOrders
+     *
+     * @param path the file path for the CustomerOrder file
+     * @param layer layers used to check if ingredients are layer
+     * @return list of CustomerOrders read from the csv file
+     */
     public static List<CustomerOrder> readCustomerFile(String path, Collection<Layer> layer){
         List<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
         String line;
@@ -108,6 +148,14 @@ public class CardUtils {
         return orderList;
     }
 
+    /**
+     * Converts a line of the csv file into a new CustomerOrder
+     * Uses the layer collection to check if ingredient should be added as ingredient or
+     *
+     * @param str the string to be converted
+     * @param layers layers used to check if ingredients are layer
+     * @return a new CustomerOrder converted from the csv string
+     */
     private static CustomerOrder stringToCustomerOrder(String str, Collection<Layer> layers){
         List<CustomerOrder> returnOrder = new ArrayList<CustomerOrder>();
         String[] parts = str.split(", ");

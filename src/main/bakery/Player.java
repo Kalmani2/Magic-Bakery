@@ -5,24 +5,50 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Player class that outlines what a player has and can do
+ * @author Muhammad Kalmani
+ * @version 1.0
+ */
 public class Player implements Serializable{
     private List<Ingredient> hand;
     private String name;
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Constructor for a new player that gives it the chosen name and an empty hand
+     * 
+     * @param name string parameter that decides the player's name
+     */
     public Player(String name){
         this.name = name;
         this.hand = new ArrayList<>();
     }
 
+    /**
+     * Adds a list of ingredients to the player's hand
+     * 
+     * @param ingredients chosen list of ingredients to be added
+     */
     public void addToHand(List<Ingredient> ingredients){
         hand.addAll(ingredients);
     }
 
+    /**
+     * Adds the chosen ingredient to the player's hand
+     * 
+     * @param ingredient chosen ingredient to be added
+     */
     public void addToHand(Ingredient ingredient){
         hand.add(ingredient);
     }
 
+    /**
+     * Checks to see if the player has the chosen ingredient on hand
+     * 
+     * @param ingredient chosen ingredient to be added
+     * @return boolean value if ingredient is on hand
+     */
     public boolean hasIngredient(Ingredient ingredient){
         for (Ingredient str : hand){
             if (str.toString().equals(ingredient.toString())){
@@ -32,6 +58,11 @@ public class Player implements Serializable{
         return false;
     }
 
+    /**
+     * Removes the chosen ingredient from the player's hand
+     * 
+     * @param ingredient chosen ingredient
+     */
     public void removeFromHand(Ingredient ingredient){
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).toString().equals(ingredient.toString())) {
@@ -42,6 +73,11 @@ public class Player implements Serializable{
         }
     }
 
+    /**
+     * Returns the player's sorted current hand of ingredients and layers
+     * 
+     * @return List of ingredients
+     */
     public List<Ingredient> getHand(){
         List<Ingredient> sortedHand = new ArrayList<>(hand); 
         
@@ -50,6 +86,11 @@ public class Player implements Serializable{
         return sortedHand;
     }
 
+    /**
+     * Get the player's current hand in a sorted string format that also counts duplicates
+     * 
+     * @return String format of player's hand
+     */
     public String getHandStr(){
         List<Ingredient> newHand = getHand();
         ArrayList<String> handIngredients = new ArrayList<>();
@@ -94,6 +135,11 @@ public class Player implements Serializable{
         return result;
     }
 
+    /**
+     * Returns the name of the player
+     * 
+     * @return string name of player
+     */
     public String toString(){
         return (name);
     }

@@ -54,6 +54,35 @@ public class CustomerOrder implements Serializable{
         if (Ingredients.isEmpty()){
             return false;
         }
+
+        List<String> newIngredients = new ArrayList<>();
+        for (Ingredient ingredient : Ingredients){
+            if (ingredient == Ingredient.HELPFUL_DUCK){
+                newIngredients.add("Helpful duck 𓅭");
+            }
+            else{
+                newIngredients.add(ingredient.toString());
+            }
+        }
+
+        List<String> recipeIngredients = new ArrayList<>();
+        for (Ingredient ingredient : recipe){
+            recipeIngredients.add(ingredient.toString());
+        }
+
+        for (String name : recipeIngredients){
+            if (newIngredients.contains(name)){
+                newIngredients.remove(name);
+            }
+            else{
+                if (newIngredients.contains("Helpful duck 𓅭")){
+                    newIngredients.remove("Helpful duck 𓅭");
+                }
+                else {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -64,20 +93,38 @@ public class CustomerOrder implements Serializable{
      * @return boolean value of fulfillment
      */
     public boolean canGarnish(List<Ingredient> Ingredients){
+        if (Ingredients.isEmpty()){
+            return false;
+        }
 
-        for (Ingredient i : recipe){
-            boolean found = false;
-            for (Ingredient j : Ingredients){
-                if (i == j){
-                    found = true;
-                    break;
-                }
+        List<String> newIngredients = new ArrayList<>();
+        for (Ingredient ingredient : Ingredients){
+            if (ingredient == Ingredient.HELPFUL_DUCK){
+                newIngredients.add("Helpful duck 𓅭");
             }
-            if (found == false){
-                return false;
+            else{
+                newIngredients.add(ingredient.toString());
             }
         }
 
+        List<String> garnishIngredients = new ArrayList<>();
+        for (Ingredient ingredient : garnish){
+            garnishIngredients.add(ingredient.toString());
+        }
+
+        for (String name : garnishIngredients){
+            if (newIngredients.contains(name)){
+                newIngredients.remove(name);
+            }
+            else{
+                if (newIngredients.contains("Helpful duck 𓅭")){
+                    newIngredients.remove("Helpful duck 𓅭");
+                }
+                else {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
@@ -89,7 +136,58 @@ public class CustomerOrder implements Serializable{
      * @return a new list of ingredients
      */
     public List<Ingredient> fulfill(List<Ingredient> ingredients, boolean garnish){
-        return null;
+
+        List<Ingredient> newIngredients = new ArrayList<>(ingredients);
+        List<Ingredient> returnList = new ArrayList<>();
+
+        if (garnish){
+            List<Ingredient> fullIngredients = new ArrayList<>(this.recipe);
+            fullIngredients.addAll(this.garnish);
+
+            for (Ingredient name : fullIngredients){
+                if (newIngredients.contains(name)){
+                    returnList.add(name);
+                    newIngredients.remove(name);
+                }
+                else{
+                    if (newIngredients.contains(Ingredient.HELPFUL_DUCK)){
+                        returnList.add(Ingredient.HELPFUL_DUCK);
+                        newIngredients.remove(Ingredient.HELPFUL_DUCK);
+                    }
+                    else {
+                        return returnList;
+                    }
+                }
+            }
+            if (this.garnish.size() == 0){
+                this.status = CustomerOrderStatus.FULFILLED;
+            }
+            else{
+                this.status = CustomerOrderStatus.GARNISHED;
+            }
+            return returnList;
+        }
+        else{
+            List<Ingredient> fullIngredients = new ArrayList<>(this.recipe);
+            
+            for (Ingredient name : fullIngredients){
+                if (newIngredients.contains(name)){
+                    returnList.add(name);
+                    newIngredients.remove(name);
+                }
+                else{
+                    if (newIngredients.contains(Ingredient.HELPFUL_DUCK)){
+                        returnList.add(Ingredient.HELPFUL_DUCK);
+                        newIngredients.remove(Ingredient.HELPFUL_DUCK);
+                    }
+                    else {
+                        return returnList;
+                    }
+                }
+            }
+            this.status = CustomerOrderStatus.FULFILLED;
+            return returnList;
+        }
     }
 
     /**
@@ -107,16 +205,14 @@ public class CustomerOrder implements Serializable{
      * @return string description of the garnishes
      */
     public String getGarnishDescription(){
-        int length = garnish.size();
-        String garnishDiscription = "";
-        for (int i = 0; i < length; i++){
-            if (i == length-1){
-                garnishDiscription += recipe.get(i);
-                break;
-            }
-            garnishDiscription += garnish.get(i) + ", ";
+        List<Ingredient> newGarnish = new ArrayList<>(garnish);
+        String garnishDescription = garnish.get(0).toString();
+        newGarnish.remove(0);
+        for (int i = 1; i < garnish.size(); i++){
+            garnishDescription += ", ";
+            garnishDescription += garnish.get(i).toString();
         }
-        return(garnishDiscription);
+        return(garnishDescription);
     }
 
     /**

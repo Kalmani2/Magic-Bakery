@@ -33,7 +33,7 @@ public class Layer extends Ingredient implements Comparable<Ingredient>, Seriali
      * @return boolean value if ingredients can bake layer
      */
     public boolean canBake(List<Ingredient> ingredients){
-        
+
         List<String> newIngredients = new ArrayList<>();
         for (Ingredient ingredient : ingredients){
             if (ingredient == Ingredient.HELPFUL_DUCK){

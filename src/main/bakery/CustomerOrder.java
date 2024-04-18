@@ -41,7 +41,7 @@ public class CustomerOrder implements Serializable{
      * Function to abandon the customer's order
      */
     public void abandon(){
-        this.status = CustomerOrder.CustomerOrderStatus.GIVEN_UP;
+        this.status = CustomerOrderStatus.GIVEN_UP;
     }
 
     /**
@@ -64,6 +64,20 @@ public class CustomerOrder implements Serializable{
      * @return boolean value of fulfillment
      */
     public boolean canGarnish(List<Ingredient> Ingredients){
+
+        for (Ingredient i : recipe){
+            boolean found = false;
+            for (Ingredient j : Ingredients){
+                if (i == j){
+                    found = true;
+                    break;
+                }
+            }
+            if (found == false){
+                return false;
+            }
+        }
+
         return true;
     }
 

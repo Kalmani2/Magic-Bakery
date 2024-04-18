@@ -91,7 +91,6 @@ public class ConsoleUtils {
         Player selectedPlayer = playerTurns.get(playerNumber);
 
         return selectedPlayer;
-
     }
 
     /**

@@ -2,6 +2,8 @@ package bakery;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Represents a layer in a bakery item.
@@ -31,9 +33,33 @@ public class Layer extends Ingredient implements Comparable<Ingredient>, Seriali
      * @return boolean value if ingredients can bake layer
      */
     public boolean canBake(List<Ingredient> ingredients){
-        for (Ingredient ing : ingredients){
-            if (recipe.indexOf(ing) == -1){
-                return false;
+        
+        List<String> newIngredients = new ArrayList<>();
+        for (Ingredient ingredient : ingredients){
+            if (ingredient == Ingredient.HELPFUL_DUCK){
+                newIngredients.add("Helpful duck 𓅭");
+            }
+            else{
+                newIngredients.add(ingredient.toString());
+            }
+        }
+
+        List<String> recipeIngredients = new ArrayList<>();
+        for (Ingredient ingredient : recipe){
+            recipeIngredients.add(ingredient.toString());
+        }
+
+        for (String name : recipeIngredients){
+            if (newIngredients.contains(name)){
+                newIngredients.remove(name);
+            }
+            else{
+                if (newIngredients.contains("Helpful duck 𓅭")){
+                    newIngredients.remove("Helpful duck 𓅭");
+                }
+                else {
+                    return false;
+                }
             }
         }
         return true;

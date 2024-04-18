@@ -79,11 +79,7 @@ public class Player implements Serializable{
      * @return List of ingredients
      */
     public List<Ingredient> getHand(){
-        List<Ingredient> sortedHand = new ArrayList<>(hand); 
-        
-        Collections.sort(sortedHand);
-    
-        return sortedHand;
+        return hand;
     }
 
     /**
@@ -92,7 +88,11 @@ public class Player implements Serializable{
      * @return String format of player's hand
      */
     public String getHandStr(){
-        List<Ingredient> newHand = getHand();
+
+        List<Ingredient> sortedHand = new ArrayList<>(hand); 
+        Collections.sort(sortedHand);
+
+        List<Ingredient> newHand = sortedHand;
         ArrayList<String> handIngredients = new ArrayList<>();
         ArrayList<Integer> handIngredientOccurrence = new ArrayList<>();
 

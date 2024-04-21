@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import bakery.CustomerOrder;
-import util.CardUtils;
 import bakery.CustomerOrder.CustomerOrderStatus;
-import java.io.FileNotFoundException;
 
 /**
  * Customers class that represents the current customers in the game
@@ -31,9 +28,7 @@ public class Customers implements Serializable{
      * @param numPlayers the number of players for the customers
      */
     public Customers(String deckFile, Random random, Collection<Layer> layers, int numPlayers){
-        this.customerDeck = CardUtils.readCustomerFile(deckFile, layers);
-        this.random = random;
-        this.inactiveCustomers = new ArrayList<CustomerOrder>();
+        
     }
 
     /**

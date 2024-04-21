@@ -8,7 +8,7 @@ import util.CardUtils;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
-import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 /**
  * The overall MagicBakery class that dictates the gameplay
@@ -30,10 +30,7 @@ public class MagicBakery implements Serializable{
     private int playerTurn;
     private int actionsRemaining;
 
-    /**
-     * Represents different types of actions that can be performed in the game.
-     * Each action type corresponds to a specific game action.
-     */
+    // ActionType enumeration
     public enum ActionType{
         DRAW_INGREDIENT, PASS_INGREDIENT, BAKE_LAYER, FULFIL_ORDER, REFRESH_PANTRY
     }
@@ -45,7 +42,7 @@ public class MagicBakery implements Serializable{
      * @param ingredientDeckFile file path of the ingredients deck
      * @param layerDeckFile the file path of the layers deck
      */
-    public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile) {
+    public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
         this.random = new Random(seed);
         this.pantryDeck = new Stack<Ingredient>();
         this.pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
@@ -225,9 +222,6 @@ public class MagicBakery implements Serializable{
      * @return collection of customerOrders
      */
     public Collection<CustomerOrder> getFulfilableCustomers(){
-        List<CustomerOrder> fulfillableCustomers = new ArrayList<>();
-        // for (CustomerOrder customer : cs)
-
         return null;
     }
 

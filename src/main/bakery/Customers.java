@@ -1,6 +1,7 @@
 package bakery;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -63,7 +64,7 @@ public class Customers implements Serializable{
      * @return collection of active customers
      */
     public Collection<CustomerOrder> getActiveCustomers(){
-        return null;
+        return activeCustomers;
     }
 
     /**
@@ -72,7 +73,7 @@ public class Customers implements Serializable{
      * @return collection of customer orders
      */
     public Collection<CustomerOrder> getCustomerDeck(){
-        return null;
+        return customerDeck;
     }
 
     /**
@@ -92,7 +93,14 @@ public class Customers implements Serializable{
      * @return a collection of customer orders matching the given status
      */
     public Collection<CustomerOrder> getInactiveCustomersWithStatus(CustomerOrderStatus status){
-        return null;
+        List<CustomerOrder> inactiveCustomers = new ArrayList<>();
+        for (CustomerOrder i : inactiveCustomers){
+            if (i.getStatus() == status){
+                inactiveCustomers.add(i);
+            }
+        }
+
+        return inactiveCustomers;
     }
 
     private void initialiseCustomerDeck(String deckfile, Collection<Layer> layers, int numPlayers){

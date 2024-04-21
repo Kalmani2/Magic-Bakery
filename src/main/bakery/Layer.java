@@ -65,6 +65,11 @@ public class Layer extends Ingredient implements Comparable<Ingredient>, Seriali
         return true;
     }
 
+    /**
+     * Returns name of layer
+     *
+     * @return name of the layer
+     */
     public String getName(){
         return super.toString();
     }

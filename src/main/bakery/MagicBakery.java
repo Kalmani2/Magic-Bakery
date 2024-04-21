@@ -8,6 +8,7 @@ import util.CardUtils;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
+import java.util.Iterator;
 
 /**
  * The overall MagicBakery class that dictates the gameplay
@@ -42,16 +43,13 @@ public class MagicBakery implements Serializable{
      * @param layerDeckFile the file path of the layers deck
      */
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
-        random = new Random(seed);
-        pantryDeck = new Stack<Ingredient>();
-        pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-        layers = CardUtils.readLayerFile(layerDeckFile);
-        pantry = new ArrayList<Ingredient>();
-        pantryDiscard = new Stack<Ingredient>();
-        players = new ArrayList<>();
-
-        this.playerTurnList = new HashMap<Integer, Player>();
-        this.playerTurn = 1;
+        this.random = new Random(seed);
+        this.pantryDeck = new Stack<Ingredient>();
+        this.pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+        this.layers = CardUtils.readLayerFile(layerDeckFile);
+        this.pantry = new ArrayList<Ingredient>();
+        this.pantryDiscard = new Stack<Ingredient>();
+        this.players = new ArrayList<>();
     }
 
     /**
@@ -60,7 +58,34 @@ public class MagicBakery implements Serializable{
      * @param layer layer to be baked
      */
     public void bakeLayer(Layer layer){
+        // remove from this.layers
+        for (Layer i : layers){
+            if (i.equals(layer)){
+                layers.remove(layer);
+            }
+        }
 
+        // add layer to players hand
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.addToHand(layer);
+
+        List<Ingredient> discardIngredients = new ArrayList<>();
+
+        // remove ingredient from players hand
+        for (Ingredient i : layer.getRecipe()){
+            for (Ingredient j : currentPlayer.getHand()){
+                if (i.equals(j)){
+                    discardIngredients.add(i);
+                    currentPlayer.removeFromHand(i);
+                    break;
+                }
+            }
+        }
+
+        // discard ingredients from hand
+        for (Ingredient i : discardIngredients){
+            pantryDiscard.add(i);
+        }
     }
 
     /**
@@ -87,7 +112,9 @@ public class MagicBakery implements Serializable{
      * @param ingredient ingredient to be taken
      */
     public void drawFromPantry(Ingredient ingredient){
-
+        // add drawn card to hand
+        Player currentPlayer = getCurrentPlayer();
+        currentPlayer.addToHand(ingredient);
     }
 
     /**
@@ -136,12 +163,20 @@ public class MagicBakery implements Serializable{
     }
 
     /**
-     * Givse the user the layers that they can bake
+     * Gives the user the layers that they can bake
      *
      * @return collection of layers that is bakeable
      */
     public Collection<Layer> getBakeableLayers(){
-        return null;
+        List<Layer> bakeableLayers = new ArrayList<>();
+        Player currentPlayer = getCurrentPlayer();
+        for (Layer l : layers){
+            if (l.canBake(currentPlayer.getHand())){
+                bakeableLayers.add(l);
+            }
+        }
+
+        return bakeableLayers;
     }
 
     /**
@@ -291,8 +326,13 @@ public class MagicBakery implements Serializable{
     public void startGame(List<String> playerNames, String customerDeckFile){
         for (String newName : playerNames){
             Player newPlayer = new Player(newName);
-            players.add(newPlayer);
+            this.players.add(newPlayer);
         }
+
+        this.playerTurnList = new HashMap<Integer, Player>();
+        this.playerTurn = 1;
+        populatePlayerTurnList();
+
         System.out.println(players);
         this.actionsRemaining = getActionsPermitted();
     }

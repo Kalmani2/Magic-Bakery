@@ -1,5 +1,4 @@
 package bakery;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
      * Checks if ingredient o is equal to the ingredient
      *
      * @param o object to be compared
-     * @return boolean value 
+     * @return {@code true} if the objects are equal, {@code false} otherwise
      */
     @Override
     public boolean equals(Object o){
@@ -62,11 +61,11 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
     /**
      * Compares the ascii value of the current ingredient and ingredient o
      *
-     * @param o an ingredient
+     * @param ingredient an ingredient
      * @return integer value of ingredient o compared to the ingredient name
      */
     @Override
-    public int compareTo(Ingredient o) {
-        return this.name.compareTo(o.name);
+    public int compareTo(Ingredient ingredient) {
+        return this.name.compareTo(ingredient.name);
     }
 }

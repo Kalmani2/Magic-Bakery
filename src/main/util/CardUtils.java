@@ -139,7 +139,7 @@ public class CardUtils {
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             br.readLine();
             while ((line = br.readLine()) != null){
-                orderList.add(stringToCustomerOrder(line,uniqueLayerList));
+                orderList.add(stringToCustomerOrder(line,layerList));
             }
         }
         catch (IOException e){
@@ -165,32 +165,13 @@ public class CardUtils {
         List<Ingredient> garnishList = new ArrayList<>();
         recipeList = stringToIngredients(parts[2]);
         garnishList = stringToIngredients(parts[3]);
-
-        List<Layer> layerList = readLayerFile("../../io/layers.csv");
-        List<Layer> uniqueLayerList = new ArrayList<>();
-        // Finds the unique layers in the list
-        for (Layer l : layerList) {
-            boolean isUnique = true;
-            for (Layer uniqueLayer : uniqueLayerList) {
-                if (uniqueLayer.getName().equals(l.getName())) {
-                    isUnique = false;
-                    break;
-                }
-            }
-            if (isUnique) {
-                uniqueLayerList.add(l);
-            }
-        }
-
-        List<Ingredient> newRecipeList = new ArrayList<>();
-        List<Ingredient> newGarnishList = new ArrayList<>();
-
-        // recipe list
-        
-
         CustomerOrder order = new CustomerOrder(orderName, recipeList, garnishList, level);
+        returnOrder.add(order);
 
-        return order;
+        // Placeholder
+        CustomerOrder customerOrder = new CustomerOrder(orderName, recipeList, garnishList, level);
+
+        return customerOrder;
     }
 
     

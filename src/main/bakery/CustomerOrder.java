@@ -28,6 +28,7 @@ public class CustomerOrder implements Serializable{
      * @param recipe ingredients used for this order
      * @param garnish list of ingredients to be used as garnish
      * @param level the difficulty level of this order
+     * @throws WrongIngredientsException recipe is null
      * @throws WrongIngredientException recipe is empty
      * 
      */
@@ -38,7 +39,10 @@ public class CustomerOrder implements Serializable{
         this.recipe = recipe;
         this.status = CustomerOrderStatus.WAITING;
 
-        if (recipe.size() == 0 || recipe == null){
+        if (recipe == null){
+            throw new WrongIngredientsException("Recipe is null");
+        }
+        if (recipe.size() == 0){
             throw new WrongIngredientsException("Recipe is empty");
         }
     }

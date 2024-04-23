@@ -184,8 +184,12 @@ public class ConsoleUtils {
      * @param prompt a format string used to prompt the user
      * @param collection the collection of objects to be enumerated
      * @return a new object enumerated
+     * @throws java.lang.IllegalArgumentException if error
      */
-    private Object promptEnumerateCollection(String prompt, Collection<Object> collection){
+    private Object promptEnumerateCollection(String prompt, Collection<Object> collection) throws java.lang.IllegalArgumentException {
+        if (collection == null || collection.isEmpty()){
+            throw new java.lang.IllegalArgumentException("Illegal");
+        }
         return null;
     }
 

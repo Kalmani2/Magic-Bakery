@@ -145,7 +145,7 @@ public class CardUtils {
     private static CustomerOrder stringToCustomerOrder(String str, Collection<Layer> layers){
 
         // splits initial string to 4 parts
-        String[] parts = str.split(",\\s*");
+        String[] parts = str.split(",\\s*", 4);
         for (int i = 0; i < parts.length; i++) {
             parts[i] = parts[i].replaceAll("\\s+", "");
         }
@@ -160,10 +160,12 @@ public class CardUtils {
         }
 
         // splits garnish list by ;
-        String[] parts3 = parts[2].split(";");
         List<Ingredient> garnishList = new ArrayList<>();
-        for (String part : parts3) {
-            garnishList.add(new Ingredient(part.trim()));
+        if (parts.length == 4) { 
+            String[] parts3 = parts[3].split(";");
+            for (String part : parts3) {
+                garnishList.add(new Ingredient(part.trim()));
+            }
         }
 
         List<Ingredient> newRecipeList = new ArrayList<>();

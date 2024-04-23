@@ -1,10 +1,14 @@
 package bakery;
 
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
+
 import bakery.CustomerOrder.CustomerOrderStatus;
 import util.CardUtils;
 
@@ -110,7 +114,13 @@ public class Customers implements Serializable{
     }
 
     private void initialiseCustomerDeck(String deckfile, Collection<Layer> layers, int numPlayers){
-
+        this.customerDeck = new Stack<>();
+        try {
+            customerDeck.addAll(CardUtils.readCustomerFile(deckfile, layers));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Collections.shuffle((Stack<CustomerOrder>) customerDeck, random);
     }
 
     /**

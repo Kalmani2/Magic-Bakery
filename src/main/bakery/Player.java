@@ -62,15 +62,17 @@ public class Player implements Serializable{
      * Removes the chosen ingredient from the player's hand
      * 
      * @param ingredient chosen ingredient
+     * @throws WrongIngredientsException if ingredient is missing
      */
-    public void removeFromHand(Ingredient ingredient){
+    public void removeFromHand(Ingredient ingredient) throws WrongIngredientsException{
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).toString().equals(ingredient.toString())) {
                 hand.remove(i);
                 i--;
-                break;
+                return;
             }
         }
+        throw new WrongIngredientsException("Missing ingredient");
     }
 
     /**

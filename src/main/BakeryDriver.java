@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class BakeryDriver {
 
     private ConsoleUtils console;
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws FileNotFoundException, IllegalArgumentException  {
         ConsoleUtils util2 = new ConsoleUtils();
         // MagicBakery magicBakery = new MagicBakery(1, "../../../io/ingredients.csv", "../../../io/layers.csv");
         // System.out.println(CardUtils.readIngredientFile("../../io/ingredients.csv").size());

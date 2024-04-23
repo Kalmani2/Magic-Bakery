@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import bakery.CustomerOrder.CustomerOrderStatus;
+import util.CardUtils;
 
 /**
  * Customers class that represents the current customers in the game
@@ -26,9 +27,14 @@ public class Customers implements Serializable{
      * @param random random value 
      * @param layers the layers used for the customers
      * @param numPlayers the number of players for the customers
+     * @throws java.io.FileNotFoundException if customer file not found
      */
-    public Customers(String deckFile, Random random, Collection<Layer> layers, int numPlayers){
-        
+    public Customers(String deckFile, Random random, Collection<Layer> layers, int numPlayers) throws java.io.FileNotFoundException {
+        try {
+            customerDeck = CardUtils.readCustomerFile(deckFile, layers);
+        } catch (Exception e) {
+            throw new java.io.FileNotFoundException("File not found");
+        }
     }
 
     /**

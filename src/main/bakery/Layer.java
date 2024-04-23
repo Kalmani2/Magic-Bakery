@@ -20,10 +20,14 @@ public class Layer extends Ingredient implements Comparable<Ingredient>, Seriali
      *
      * @param name string name for the layer
      * @param recipe ingredients used for this layer
+     * @throws WrongIngredientsException if the recipe is empty
      */
-    public Layer(String name, List<Ingredient> recipe){
+    public Layer(String name, List<Ingredient> recipe) throws WrongIngredientsException {
         super(name);
         this.recipe = recipe;
+        if (recipe.isEmpty()) {
+            throw new WrongIngredientsException("Recipe cannot be empty");
+        }
     }
 
     /**

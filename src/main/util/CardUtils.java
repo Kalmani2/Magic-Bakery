@@ -27,8 +27,9 @@ public class CardUtils {
      *
      * @param path the file path for the ingredient file
      * @return list of ingredients read from the csv file
+     * @throws java.io.FileNotFoundException if file to read is not found
      */
-    public static List<Ingredient> readIngredientFile(String path){
+    public static List<Ingredient> readIngredientFile(String path) throws java.io.FileNotFoundException {
         List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
@@ -38,7 +39,7 @@ public class CardUtils {
             }
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new java.io.FileNotFoundException("File not found: " + path);
         }
         return ingredientsList;
     }
@@ -67,8 +68,9 @@ public class CardUtils {
      *
      * @param path the file path for the layer file
      * @return list of layer read from the csv file
+     * @throws java.io.FileNotFoundException if file not found
      */
-    public static List<Layer> readLayerFile(String path){
+    public static List<Layer> readLayerFile(String path) throws java.io.FileNotFoundException {
         List<Layer> layerList = new ArrayList<Layer>();
         String line;
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
@@ -78,7 +80,7 @@ public class CardUtils {
             }
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new java.io.FileNotFoundException("File not found: " + path);
         }
         return layerList;
     }
@@ -114,36 +116,20 @@ public class CardUtils {
      * @param path the file path for the CustomerOrder file
      * @param layer layers used to check if ingredients are layer
      * @return list of CustomerOrders read from the csv file
+     * @throws java.io.FileNotFoundException if file not found
      */
-    public static List<CustomerOrder> readCustomerFile(String path, Collection<Layer> layer){
+    public static List<CustomerOrder> readCustomerFile(String path, Collection<Layer> layer) throws java.io.FileNotFoundException {
         List<CustomerOrder> orderList = new ArrayList<CustomerOrder>();
         String line;
-        List<Layer> layerList = new ArrayList<Layer>();
-        layerList = readLayerFile("../../io/layers.csv");
-        List<Layer> uniqueLayerList = new ArrayList<>();
-        
-        // Finds the unique layers in the list
-        for (Layer layers : layerList) {
-            boolean isUnique = true;
-            for (Layer uniqueLayer : uniqueLayerList) {
-                if (uniqueLayer.getName().equals(layers.getName())) {
-                    isUnique = false;
-                    break;
-                }
-            }
-            if (isUnique) {
-                uniqueLayerList.add(layers);
-            }
-        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(path))){
             br.readLine();
             while ((line = br.readLine()) != null){
-                orderList.add(stringToCustomerOrder(line,uniqueLayerList));
+                orderList.add(stringToCustomerOrder(line, layer));
             }
         }
         catch (IOException e){
-            e.printStackTrace();
+            throw new java.io.FileNotFoundException("File not found: " + path);
         }
         return orderList;
     }
@@ -157,38 +143,65 @@ public class CardUtils {
      * @return a new CustomerOrder converted from the csv string
      */
     private static CustomerOrder stringToCustomerOrder(String str, Collection<Layer> layers){
-        List<CustomerOrder> returnOrder = new ArrayList<CustomerOrder>();
-        String[] parts = str.split(", ");
-        int level = Integer.parseInt(parts[0]);
-        String orderName = parts[1];
-        List<Ingredient> recipeList = new ArrayList<>();
-        List<Ingredient> garnishList = new ArrayList<>();
-        recipeList = stringToIngredients(parts[2]);
-        garnishList = stringToIngredients(parts[3]);
 
-        List<Layer> layerList = readLayerFile("../../io/layers.csv");
-        List<Layer> uniqueLayerList = new ArrayList<>();
-        // Finds the unique layers in the list
-        for (Layer l : layerList) {
-            boolean isUnique = true;
-            for (Layer uniqueLayer : uniqueLayerList) {
-                if (uniqueLayer.getName().equals(l.getName())) {
-                    isUnique = false;
-                    break;
-                }
-            }
-            if (isUnique) {
-                uniqueLayerList.add(l);
-            }
+        // splits initial string to 4 parts
+        String[] parts = str.split(",\\s*");
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].replaceAll("\\s+", "");
+        }
+        int level = Integer.parseInt(parts[0]);
+        String orderName = parts[1].trim();
+
+        // splits recipe list by ;
+        String[] parts2 = parts[2].split(";");
+        List<Ingredient> recipeList = new ArrayList<>();
+        for (String part : parts2) {
+            recipeList.add(new Ingredient(part.trim()));
+        }
+
+        // splits garnish list by ;
+        String[] parts3 = parts[2].split(";");
+        List<Ingredient> garnishList = new ArrayList<>();
+        for (String part : parts3) {
+            garnishList.add(new Ingredient(part.trim()));
         }
 
         List<Ingredient> newRecipeList = new ArrayList<>();
         List<Ingredient> newGarnishList = new ArrayList<>();
 
         // recipe list
-        
+        for (Ingredient i : recipeList){
+            boolean found = false;
+            for (Layer j : layers){
+                if (i.toString().equals(j.toString())){
+                    found = true;
+                    Layer newLayer = new Layer(j.toString(), j.getRecipe());
+                    newRecipeList.add(newLayer);
+                    break;
+                }
+            }
+            if (!found){
+                newRecipeList.add(i);
+            }
+        }
 
-        CustomerOrder order = new CustomerOrder(orderName, recipeList, garnishList, level);
+        // garnish list
+        for (Ingredient i : garnishList){
+            boolean found = false;
+            for (Layer j : layers){
+                if (i.toString().equals(j.toString())){
+                    found = true;
+                    Layer newLayer = new Layer(j.toString(), j.getRecipe());
+                    newGarnishList.add(newLayer);
+                    break;
+                }
+            }
+            if (!found){
+                newGarnishList.add(i);
+            }
+        }
+
+        CustomerOrder order = new CustomerOrder(orderName, newRecipeList, newGarnishList, level);
 
         return order;
     }

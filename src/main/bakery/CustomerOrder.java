@@ -28,13 +28,19 @@ public class CustomerOrder implements Serializable{
      * @param recipe ingredients used for this order
      * @param garnish list of ingredients to be used as garnish
      * @param level the difficulty level of this order
+     * @throws WrongIngredientException recipe is empty
+     * 
      */
-    public CustomerOrder(String name, List<Ingredient> recipe, List<Ingredient> garnish, int level){
+    public CustomerOrder(String name, List<Ingredient> recipe, List<Ingredient> garnish, int level) throws WrongIngredientsException{
         this.garnish = garnish;
         this.level = level;
         this.name = name;
         this.recipe = recipe;
         this.status = CustomerOrderStatus.WAITING;
+
+        if (recipe.size() == 0 || recipe == null){
+            throw new WrongIngredientsException("Recipe is empty");
+        }
     }
 
     /**
@@ -134,8 +140,9 @@ public class CustomerOrder implements Serializable{
      * @param ingredients ingredients to check for order fulfillment
      * @param garnish boolean value of if garnish is needed
      * @return a new list of ingredients
+     * @throws WrongIngredientsException if wrong ingredients used
      */
-    public List<Ingredient> fulfill(List<Ingredient> ingredients, boolean garnish){
+    public List<Ingredient> fulfill(List<Ingredient> ingredients, boolean garnish) throws WrongIngredientsException{
 
         List<Ingredient> newIngredients = new ArrayList<>(ingredients);
         List<Ingredient> returnList = new ArrayList<>();
@@ -155,7 +162,7 @@ public class CustomerOrder implements Serializable{
                         newIngredients.remove(Ingredient.HELPFUL_DUCK);
                     }
                     else {
-                        return returnList;
+                        throw new WrongIngredientsException("Wrong ingredients");
                     }
                 }
             }

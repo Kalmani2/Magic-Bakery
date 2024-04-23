@@ -1,5 +1,6 @@
 package bakery;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,7 +9,6 @@ import util.CardUtils;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Stack;
-import java.util.Iterator;
 
 /**
  * The overall MagicBakery class that dictates the gameplay
@@ -41,15 +41,28 @@ public class MagicBakery implements Serializable{
      * @param seed seed value for randomisation
      * @param ingredientDeckFile file path of the ingredients deck
      * @param layerDeckFile the file path of the layers deck
+     * @throws java.io.FileNotFoundException file not found
+     * @throws java.lang.IllegalArgumentException too many players or too little players
      */
-    public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile){
+    public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile) throws java.io.FileNotFoundException, java.lang.IllegalArgumentException {
         this.random = new Random(seed);
         this.pantryDeck = new Stack<Ingredient>();
-        this.pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
-        this.layers = CardUtils.readLayerFile(layerDeckFile);
+        try {
+            this.pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+            this.layers = CardUtils.readLayerFile(layerDeckFile);
+        } catch (Exception e) {
+            throw new java.io.FileNotFoundException("File not found");
+        }
         this.pantry = new ArrayList<Ingredient>();
         this.pantryDiscard = new Stack<Ingredient>();
         this.players = new ArrayList<>();
+
+        if (players.size() == 1){
+            throw new java.lang.IllegalArgumentException("Need more players");
+        }
+        else if (players.size() == 6){
+            throw new java.lang.IllegalArgumentException("Too many players");
+        }
     }
 
     /**
@@ -92,9 +105,14 @@ public class MagicBakery implements Serializable{
      * Returns ingredient taken from the magic bakery pantry deck
      *
      * @return ingredient taken from the deck
+     * @throws EmptyPantryException if pantry is empty
      */
     private Ingredient drawFromPantryDeck(){
-        return null;
+        if (pantryDeck.size() == 0){
+            throw new EmptyPantryException("Pantry deck is empty", null);
+        }
+        Ingredient poppedIngredient = ((Stack<Ingredient>) pantryDeck).pop();
+        return poppedIngredient;
     }
 
     /**
@@ -103,7 +121,20 @@ public class MagicBakery implements Serializable{
      * @param ingredientName name of ingredient to be taken
      */
     public void drawFromPantry(String ingredientName){
+        Player currentPlayer = getCurrentPlayer();
 
+        Ingredient newIngredient = new Ingredient(ingredientName);
+        currentPlayer.addToHand(newIngredient);
+
+        ArrayList<Ingredient> copyPantry = (ArrayList<Ingredient>) pantry;
+        for (Ingredient i : copyPantry){
+            if (i.toString().equals(ingredientName)){
+                copyPantry.remove(i);
+                break;
+            }
+        }
+        copyPantry.add(drawFromPantryDeck());
+        pantry = copyPantry;
     }
 
     /**
@@ -112,9 +143,11 @@ public class MagicBakery implements Serializable{
      * @param ingredient ingredient to be taken
      */
     public void drawFromPantry(Ingredient ingredient){
-        // add drawn card to hand
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.addToHand(ingredient);
+
+        pantry.remove(ingredient);
+        pantry.add(drawFromPantryDeck());
     }
 
     /**
@@ -322,8 +355,9 @@ public class MagicBakery implements Serializable{
      *
      * @param playerNames the file to be loaded
      * @param customerDeckFile the file path for the customers
+     * @throws java.io.FileNotFoundException if file not found
      */
-    public void startGame(List<String> playerNames, String customerDeckFile){
+    public void startGame(List<String> playerNames, String customerDeckFile) throws java.io.FileNotFoundException {
         for (String newName : playerNames){
             Player newPlayer = new Player(newName);
             this.players.add(newPlayer);
@@ -332,6 +366,12 @@ public class MagicBakery implements Serializable{
         this.playerTurnList = new HashMap<Integer, Player>();
         this.playerTurn = 1;
         populatePlayerTurnList();
+            
+        // fix readCustomerFile first
+        // if (CardUtils.readCustomerFile(customerDeckFile, layers) == null){
+        //     throw new FileNotFoundException("File not found");
+        // }
+        customers = new Customers(customerDeckFile, random, layers, players.size());
 
         System.out.println(players);
         this.actionsRemaining = getActionsPermitted();

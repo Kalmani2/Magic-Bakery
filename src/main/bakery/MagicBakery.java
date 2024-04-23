@@ -1,6 +1,5 @@
 package bakery;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,14 +22,16 @@ public class MagicBakery implements Serializable{
     private Collection<Ingredient> pantryDeck;
     private Collection<Ingredient> pantryDiscard;
     private Random random;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5L;
 
     // Extra instance variables
     private HashMap<Integer, Player> playerTurnList;
     private int playerTurn;
     private int actionsRemaining;
 
-    // ActionType enumeration
+    /**
+     * Represents different types of actions that can be performed in the game.
+     */
     public enum ActionType{
         DRAW_INGREDIENT, PASS_INGREDIENT, BAKE_LAYER, FULFIL_ORDER, REFRESH_PANTRY
     }
@@ -299,9 +300,32 @@ public class MagicBakery implements Serializable{
      *
      * @param file the file to be loaded
      * @return a MagicBakery object to be loaded
+     * @throws java.lang.ClassCastException if save state is invalid
+     * @throws java.io.FileNotFoundException if file can't be found
      */
-    public static MagicBakery loadState(File file){
-        return null;
+    public static MagicBakery loadState(File file) throws java.lang.ClassCastException, java.io.FileNotFoundException{
+        MagicBakery loadedBakery = null;
+
+        if (!file.exists()) {
+            throw new java.io.FileNotFoundException("File cannot be found");
+        }
+
+        try (FileInputStream fileInputStream = new FileInputStream(file);
+             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream)) {
+            Object obj = objectInputStream.readObject();
+
+            if (obj instanceof MagicBakery) {
+                loadedBakery = (MagicBakery) obj;
+                System.out.println("State loaded successfully.");
+            } else {
+                throw new java.lang.ClassCastException("Save state is invalid");
+            }
+
+        } catch (IOException | ClassNotFoundException e) {
+            
+        }
+
+        return loadedBakery;
     }
 
     /**
@@ -345,9 +369,19 @@ public class MagicBakery implements Serializable{
      * Saves the state of the object to the specified file.
      *
      * @param file the file to which the state will be saved
+     * @throws java.io.FileNotFoundException if file not found
      */
-    public void saveState(File file){
-        
+    public void saveState(File file) throws java.io.FileNotFoundException{
+        try (FileOutputStream fileOutputStream = new FileOutputStream(file);
+             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
+
+            // Write the current instance of MagicBakery to the ObjectOutputStream
+            objectOutputStream.writeObject(this);
+            System.out.println("State saved successfully.");
+
+        } catch (IOException e) {
+            throw new java.io.FileNotFoundException("File not found");
+        }
     }
 
     /**

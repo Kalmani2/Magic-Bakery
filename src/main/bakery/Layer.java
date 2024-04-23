@@ -13,7 +13,7 @@ import java.util.Collection;
  */
 public class Layer extends Ingredient implements Comparable<Ingredient>, Serializable{
     private List<Ingredient> recipe;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4L;
 
     /**
      * Creates a layer with the given name and recipe

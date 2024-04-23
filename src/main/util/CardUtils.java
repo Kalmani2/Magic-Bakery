@@ -145,10 +145,7 @@ public class CardUtils {
     private static CustomerOrder stringToCustomerOrder(String str, Collection<Layer> layers){
 
         // splits initial string to 4 parts
-        String[] parts = str.split(",\\s*", 4);
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].replaceAll("\\s+", "");
-        }
+        String[] parts = str.split(",", 4);
         int level = Integer.parseInt(parts[0]);
         String orderName = parts[1].trim();
 

@@ -22,7 +22,7 @@ public class Customers implements Serializable{
     private Collection<CustomerOrder> customerDeck;
     private List<CustomerOrder> inactiveCustomers;
     private Random random;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /**
      * Instantiates the customer with the given values

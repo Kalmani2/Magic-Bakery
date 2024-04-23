@@ -13,7 +13,7 @@ import java.util.Collections;
 public class Player implements Serializable{
     private List<Ingredient> hand;
     private String name;
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6L;
 
     /**
      * Constructor for a new player that gives it the chosen name and an empty hand

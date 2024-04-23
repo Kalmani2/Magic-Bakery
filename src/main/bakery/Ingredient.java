@@ -9,8 +9,12 @@ import java.util.Objects;
  */
 public class Ingredient implements Comparable<Ingredient>, Serializable{
     private String name;
+
+    /**
+     * Helpful duck ingredient
+     */
     public static final Ingredient HELPFUL_DUCK = new Ingredient("Helpful duck 𓅭");
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 3L;
 
     /**
      * Instantiate the ingredient

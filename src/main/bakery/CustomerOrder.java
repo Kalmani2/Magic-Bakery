@@ -29,7 +29,6 @@ public class CustomerOrder implements Serializable{
      * @param garnish list of ingredients to be used as garnish
      * @param level the difficulty level of this order
      * @throws WrongIngredientsException recipe is null
-     * @throws WrongIngredientException recipe is empty
      * 
      */
     public CustomerOrder(String name, List<Ingredient> recipe, List<Ingredient> garnish, int level) throws WrongIngredientsException{

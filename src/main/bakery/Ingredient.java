@@ -31,7 +31,6 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
      * @param o object to be compared
      * @return {@code true} if the objects are equal, {@code false} otherwise
      */
-    @Override
     public boolean equals(Object o){
         if (this == o){
             return true;
@@ -57,7 +56,6 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
      *
      * @return String value of ingredient
      */
-    @Override
     public String toString(){
         return (name);
     }
@@ -68,7 +66,6 @@ public class Ingredient implements Comparable<Ingredient>, Serializable{
      * @param ingredient an ingredient
      * @return integer value of ingredient o compared to the ingredient name
      */
-    @Override
     public int compareTo(Ingredient ingredient) {
         return this.name.compareTo(ingredient.name);
     }

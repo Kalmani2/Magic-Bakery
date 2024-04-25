@@ -278,8 +278,7 @@ public class CustomerOrder implements Serializable{
      * Returns the string version of the customer's order
      * @return string representation of customer's order
      */
-    @Override
     public String toString(){
-        return("some recipe");
+        return(name);
     }
 }

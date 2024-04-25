@@ -9,6 +9,7 @@ import bakery.CustomerOrder;
 import bakery.Ingredient;
 import bakery.MagicBakery;
 import bakery.Player;
+import bakery.MagicBakery.ActionType;
 
 /**
  * Class comprised of functions used to take user input from the console
@@ -47,13 +48,12 @@ public class ConsoleUtils {
 
     /**
      * Prompts the user for an action in the game
-     *
      * @param prompt a format string used to prompt the user
      * @param bakery the magicBakery object to be used
      * @return an action type as specified in magic bakery
      */
-    public MagicBakery.ActionType promptForAction(String prompt, MagicBakery bakery){
-        return null;
+    public ActionType promptForAction(String prompt, MagicBakery bakery){
+        return ActionType.BAKE_LAYER;
     }
 
     /**

@@ -72,6 +72,12 @@ public class MagicBakery implements Serializable{
      * @param layer layer to be baked
      */
     public void bakeLayer(Layer layer){
+
+        if (!layers.contains(layer)) {
+            throw new WrongIngredientsException("Layer does not exist");
+        }
+        
+
         // remove from this.layers
         for (Layer i : layers){
             if (i.equals(layer)){
@@ -206,7 +212,9 @@ public class MagicBakery implements Serializable{
         Player currentPlayer = getCurrentPlayer();
         for (Layer l : layers){
             if (l.canBake(currentPlayer.getHand())){
-                bakeableLayers.add(l);
+                if (bakeableLayers.indexOf(l) == -1){
+                    bakeableLayers.add(l);
+                }
             }
         }
 
@@ -274,7 +282,14 @@ public class MagicBakery implements Serializable{
      * @return collection of layers
      */
     public Collection<Layer> getLayers(){
-        return layers;
+        List<Layer> newlayers = new ArrayList<>();
+        for (Layer l : layers){
+            if (newlayers.indexOf(l) == -1){
+                newlayers.add(l);
+            }
+        }
+
+        return newlayers;
     }
 
     /**
@@ -335,6 +350,12 @@ public class MagicBakery implements Serializable{
      * @param recipient the player who will be passed the ingredient
      */
     public void passCard(Ingredient ingredient, Player recipient){
+
+        if (!pantryDeck.contains(ingredient)) {
+            throw new WrongIngredientsException("Ingredient does not exist");
+        }
+        
+
         actionsRemaining -= 1;
         if (actionsRemaining <= 0){
             throw new TooManyActionsException("Too many actions have been done");
@@ -374,8 +395,6 @@ public class MagicBakery implements Serializable{
     public void saveState(File file) throws java.io.FileNotFoundException{
         try (FileOutputStream fileOutputStream = new FileOutputStream(file);
              ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-
-            // Write the current instance of MagicBakery to the ObjectOutputStream
             objectOutputStream.writeObject(this);
             System.out.println("State saved successfully.");
 

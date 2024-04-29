@@ -48,36 +48,36 @@ public class MagicBakery implements Serializable{
      */
     public MagicBakery(long seed, String ingredientDeckFile, String layerDeckFile) throws java.io.FileNotFoundException, java.lang.IllegalArgumentException {
         this.random = new Random(seed);
-        this.pantryDeck = new Stack<Ingredient>();
+        this.pantryDeck = new Stack<>();
         try {
-            this.pantryDeck = CardUtils.readIngredientFile(ingredientDeckFile);
+            this.pantryDeck.addAll(CardUtils.readIngredientFile(ingredientDeckFile));
             this.layers = CardUtils.readLayerFile(layerDeckFile);
         } catch (Exception e) {
             throw new java.io.FileNotFoundException("File not found");
         }
-        this.pantry = new ArrayList<Ingredient>();
-        this.pantryDiscard = new Stack<Ingredient>();
+        this.pantry = new ArrayList<>();
+        this.pantryDiscard = new Stack<>();
         this.players = new ArrayList<>();
-
-        if (players.size() == 1){
-            throw new java.lang.IllegalArgumentException("Need more players");
-        }
-        else if (players.size() == 6){
-            throw new java.lang.IllegalArgumentException("Too many players");
-        }
     }
 
     /**
      * Bakes the chosen layer
      *
      * @param layer layer to be baked
+     * @throws TooManyActionsException if error
+     * @throws WrongIngredientsException if error
      */
-    public void bakeLayer(Layer layer){
+    public void bakeLayer(Layer layer) throws TooManyActionsException, WrongIngredientsException{
+
+        if (actionsRemaining == 0){
+            throw new TooManyActionsException("Too many actions have been done");
+        }
+
+        actionsRemaining -= 1;
 
         if (!layers.contains(layer)) {
             throw new WrongIngredientsException("Layer does not exist");
         }
-        
 
         // remove from this.layers
         for (Layer i : layers){
@@ -116,12 +116,21 @@ public class MagicBakery implements Serializable{
      * @throws EmptyPantryException if pantry is empty
      */
     private Ingredient drawFromPantryDeck(){
-        return null;
-        // if (pantryDeck.size() == 0){
-        //     throw new EmptyPantryException("Pantry deck is empty", null);
-        // }
-        // Ingredient poppedIngredient = ((Stack<Ingredient>) pantryDeck).pop();
-        // return poppedIngredient;
+
+        if (pantryDeck.isEmpty()){
+            pantryDeck.addAll(pantryDiscard);
+            pantryDiscard.clear();
+            List<Ingredient> shuffleList = new ArrayList<>(pantryDeck);
+            Collections.shuffle(shuffleList, this.random);
+            pantryDeck.clear();
+            pantryDeck.addAll(shuffleList);
+        }
+
+        if (pantryDeck.size() == 0){
+            throw new EmptyPantryException("Pantry deck is empty", null);
+        }
+
+        return ((Stack<Ingredient>) pantryDeck).pop();
     }
 
     /**
@@ -146,7 +155,8 @@ public class MagicBakery implements Serializable{
             throw new WrongIngredientsException("Ingredient does not exist");
         }
 
-        ArrayList<Ingredient> copyPantry = (ArrayList<Ingredient>) pantry;
+        ArrayList<Ingredient> copyPantry = new ArrayList<>();
+        copyPantry.addAll(pantry);
         for (Ingredient i : copyPantry){
             if (i.toString().equals(ingredientName)){
                 copyPantry.remove(i);
@@ -164,6 +174,14 @@ public class MagicBakery implements Serializable{
      * @param ingredient ingredient to be taken
      */
     public void drawFromPantry(Ingredient ingredient){
+
+        if (actionsRemaining == 0){
+            throw new TooManyActionsException("Too many actions done");
+        }
+
+        if (!pantry.contains(ingredient)) {
+            throw new WrongIngredientsException("Ingredient does not exist");
+        }
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.addToHand(ingredient);
 
@@ -193,6 +211,13 @@ public class MagicBakery implements Serializable{
      * @return list of ingredients left
      */
     public List<Ingredient> fulfillOrder(CustomerOrder customer, boolean garnish){
+
+        if (actionsRemaining == 0){
+            throw new TooManyActionsException("Too many actions have been done");
+        }
+
+        actionsRemaining -= 1;
+
         return null;
     }
 
@@ -375,11 +400,11 @@ public class MagicBakery implements Serializable{
             throw new WrongIngredientsException("Ingredient does not exist");
         }
         
-
-        actionsRemaining -= 1;
-        if (actionsRemaining <= 0){
+        if (actionsRemaining == 0){
             throw new TooManyActionsException("Too many actions have been done");
         }
+
+        actionsRemaining -= 1;
         Player currentPlayer = getCurrentPlayer();
         currentPlayer.removeFromHand(ingredient);
         recipient.addToHand(ingredient);
@@ -403,17 +428,18 @@ public class MagicBakery implements Serializable{
      * Refreshes the game's pantry
      */
     public void refreshPantry(){
+
+        if (actionsRemaining == 0){
+            throw new TooManyActionsException("Too many actions have been done");
+        }
+        actionsRemaining -= 1;
         pantry.clear();
 
-        Stack<Ingredient> newStack = new Stack<>();
-        newStack.addAll(pantryDeck);
-
         for (int i = 0; i < 5; i++){
-            Ingredient ingredient1 = newStack.pop();
+            Ingredient ingredient1 = drawFromPantryDeck();
             pantry.add(ingredient1);
             pantryDiscard.add(ingredient1);
         }
-        pantryDeck = newStack;
         actionsRemaining--;
         if (actionsRemaining == 0){
             endTurn();
@@ -445,15 +471,13 @@ public class MagicBakery implements Serializable{
      * @throws java.io.FileNotFoundException if file not found
      */
     public void startGame(List<String> playerNames, String customerDeckFile) throws java.io.FileNotFoundException {
-        Stack<Ingredient> newStack = new Stack<>();
-        newStack.addAll(pantryDeck);
 
         for (String newName : playerNames){
             Player newPlayer = new Player(newName);
 
             // populate player's hands
             for (int i = 0; i < 3; i++){
-                newPlayer.addToHand(newStack.pop());
+                newPlayer.addToHand(drawFromPantryDeck());
             }
 
             this.players.add(newPlayer);
@@ -461,23 +485,29 @@ public class MagicBakery implements Serializable{
 
         // populate pantry
         for (int i = 0; i < 5; i++){
-            pantry.add(newStack.pop());
+            pantry.add(drawFromPantryDeck());
         }
 
         this.playerTurnList = new HashMap<Integer, Player>();
         this.playerTurn = 1;
         populatePlayerTurnList();
+
+        if (players.size() < 2){
+            throw new java.lang.IllegalArgumentException("Need more players");
+        }
+        else if (players.size() > 5){
+            throw new java.lang.IllegalArgumentException("Too many players");
+        }
             
         // fix readCustomerFile first
         // if (CardUtils.readCustomerFile(customerDeckFile, layers) == null){
         //     throw new FileNotFoundException("File not found");
         // }
         customers = new Customers(customerDeckFile, random, layers, players.size());
-        Collections.shuffle(new ArrayList<>(newStack), this.random);
-
-        System.out.println(players);
+        List<Ingredient> shuffleList = new ArrayList<>(pantryDeck);
+        Collections.shuffle(shuffleList, this.random);
+        pantryDeck.clear();
+        pantryDeck.addAll(shuffleList);
         this.actionsRemaining = getActionsPermitted();
-
-        pantryDeck = newStack;
     }
 }

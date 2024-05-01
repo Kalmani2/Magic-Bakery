@@ -120,10 +120,6 @@ public class MagicBakery implements Serializable{
         if (pantryDeck.isEmpty()){
             pantryDeck.addAll(pantryDiscard);
             pantryDiscard.clear();
-            List<Ingredient> shuffleList = new ArrayList<>(pantryDeck);
-            Collections.shuffle(shuffleList, this.random);
-            pantryDeck.clear();
-            pantryDeck.addAll(shuffleList);
         }
 
         if (pantryDeck.size() == 0){
@@ -200,6 +196,7 @@ public class MagicBakery implements Serializable{
         if (players.size() == playerTurn){
             playerTurn = 1;
         }
+        this.actionsRemaining = getActionsPermitted();
         return true;
     }
 
@@ -309,7 +306,11 @@ public class MagicBakery implements Serializable{
      * @return collection of customerOrders
      */
     public Collection<CustomerOrder> getFulfilableCustomers(){
-        return null;
+
+        if (getCurrentPlayer().getHand() == null){
+            return new ArrayList<CustomerOrder>();
+        }
+        return new ArrayList<CustomerOrder>();
     }
 
     /**
@@ -318,7 +319,10 @@ public class MagicBakery implements Serializable{
      * @return collection of customerOrders
      */
     public Collection<CustomerOrder> getGarnishableCustomers(){
-        return null;
+        if (getCurrentPlayer().getHand() == null){
+            return new ArrayList<CustomerOrder>();
+        }
+        return new ArrayList<CustomerOrder>();
     }
 
     /**
@@ -499,15 +503,7 @@ public class MagicBakery implements Serializable{
             throw new java.lang.IllegalArgumentException("Too many players");
         }
             
-        // fix readCustomerFile first
-        // if (CardUtils.readCustomerFile(customerDeckFile, layers) == null){
-        //     throw new FileNotFoundException("File not found");
-        // }
         customers = new Customers(customerDeckFile, random, layers, players.size());
-        List<Ingredient> shuffleList = new ArrayList<>(pantryDeck);
-        Collections.shuffle(shuffleList, this.random);
-        pantryDeck.clear();
-        pantryDeck.addAll(shuffleList);
         this.actionsRemaining = getActionsPermitted();
     }
 }

@@ -200,66 +200,6 @@ public class CardUtils {
 
         CustomerOrder order = new CustomerOrder(name, returnRecipe, returnGarnish, level);
         return order;
-        
-        // // splits initial string to 4 parts
-        // String[] parts = str.split(",", 4);
-        // int level = Integer.parseInt(parts[0]);
-        // String orderName = parts[1].trim();
-
-        // // splits recipe list by ;
-        // String[] parts2 = parts[2].split(";");
-        // List<Ingredient> recipeList = new ArrayList<>();
-        // for (String part : parts2) {
-        //     recipeList.add(new Ingredient(part.trim()));
-        // }
-
-        // // splits garnish list by ;
-        // List<Ingredient> garnishList = new ArrayList<>();
-        // if (parts.length == 4) { 
-        //     String[] parts3 = parts[3].split(";");
-        //     for (String part : parts3) {
-        //         garnishList.add(new Ingredient(part.trim()));
-        //     }
-        // }
-
-        // List<Ingredient> newRecipeList = new ArrayList<>();
-        // List<Ingredient> newGarnishList = new ArrayList<>();
-
-        // // recipe list
-        // for (Ingredient i : recipeList){
-        //     boolean found = false;
-        //     for (Layer j : layers){
-        //         if (i.toString().equals(j.toString())){
-        //             found = true;
-        //             Layer newLayer = new Layer(j.toString(), j.getRecipe());
-        //             newRecipeList.add(newLayer);
-        //             break;
-        //         }
-        //     }
-        //     if (!found){
-        //         newRecipeList.add(i);
-        //     }
-        // }
-
-        // // garnish list
-        // for (Ingredient i : garnishList){
-        //     boolean found = false;
-        //     for (Layer j : layers){
-        //         if (i.toString().equals(j.toString())){
-        //             found = true;
-        //             Layer newLayer = new Layer(j.toString(), j.getRecipe());
-        //             newGarnishList.add(newLayer);
-        //             break;
-        //         }
-        //     }
-        //     if (!found){
-        //         newGarnishList.add(i);
-        //     }
-        // }
-
-        // CustomerOrder order = new CustomerOrder(orderName, newRecipeList, newGarnishList, level);
-
-        // return order;
     }
 
     

@@ -35,7 +35,9 @@ public class Customers implements Serializable{
      */
     public Customers(String deckFile, Random random, Collection<Layer> layers, int numPlayers) throws java.io.FileNotFoundException {
         try {
-            customerDeck = CardUtils.readCustomerFile(deckFile, layers);
+            List<CustomerOrder> deckList = new ArrayList<>(CardUtils.readCustomerFile(deckFile, layers));
+            Collections.shuffle(deckList, random);
+            customerDeck = new ArrayList<>(deckList);
         } catch (Exception e) {
             throw new java.io.FileNotFoundException("File not found");
         }
